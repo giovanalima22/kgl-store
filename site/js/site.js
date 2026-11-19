@@ -590,8 +590,8 @@
   }
 
   /* ---------- Galeria (usada nos dois tipos de anúncio) ---------- */
-  function galeria(fotos, alt, reserva) {
-    var g = '<div class="galeria"><div class="galeria-principal" id="foto-principal">' +
+  function galeria(fotos, alt, reserva, quadrada) {
+    var g = '<div class="galeria' + (quadrada ? " galeria-quadrada" : "") + '"><div class="galeria-principal" id="foto-principal">' +
       (fotos.length ? '<img src="' + esc(fotos[0]) + '" alt="' + esc(alt) + '">' : reserva) + "</div>";
     if (fotos.length > 1) {
       g += '<div class="miniaturas">' + fotos.map(function (f, i) {
@@ -767,7 +767,7 @@
       (x.cor ? '<div class="bloco"><span>Cor</span><b>' + esc(x.cor) + "</b></div>" : "");
     det.innerHTML =
       '<p class="trilha"><a href="acessorios.html">Acessórios</a> &nbsp;/&nbsp; <a href="acessorios.html?categoria=' + encodeURIComponent(x.categoria) + '">' + esc(x.categoria) + "</a></p>" +
-      '<div class="produto">' + galeria(x.fotos, x.nome, '<div class="acc-reserva">' + ICONE_ACESSORIO + "</div>") +
+      '<div class="produto">' + galeria(x.fotos, x.nome, '<div class="acc-reserva">' + ICONE_ACESSORIO + "</div>", true) +
       '<div class="produto-dados">' +
       '<span class="selo">' + (x.poucas ? "Últimas unidades" : "Disponível") + "</span>" + (x.destaque ? " " + seloDestaque(x.destaque) : "") +
       '<p class="produto-marca">' + esc(x.marca) + "</p><h1>" + esc(x.nome) + "</h1>" +
