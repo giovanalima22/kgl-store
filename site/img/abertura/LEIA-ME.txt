@@ -1,0 +1,8 @@
+FOTOS DA ABERTURA (pagina inicial)
+
+Nomes exatos:
+  esquerda.png  centro.png  direita.png
+
+PNG com fundo transparente, aparelho em pe, recortado rente as bordas,
+cerca de 600 x 1220 px e abaixo de 400 KB.
+Enquanto o arquivo nao existir, o site mostra a ilustracao.

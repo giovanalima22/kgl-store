@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#17181b">
+<title>KGL Gestão | Gestão inteligente</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#17181b;--card:#25262b;--ink:#f2f0eb;--muted:#b5b1a9;--line:#3b3b40;--green:#c9a66b;--dark:#17181b;--pale:#343036;--red:#e27d7d;--amber:#c9a66b;--shadow:0 12px 32px #0005}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:14px Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:11px 15px;background:#b9975b;color:#17181b;font-weight:750}button:disabled{opacity:.55;cursor:not-allowed}.secondary{background:#34353b;color:#eee9df;border:1px solid #44454b}.danger{background:#452a2a;color:#ffaaaa}.app{min-height:100vh;display:block}.side{display:none}.brand{font-size:21px;font-weight:850;padding:0 12px 28px;letter-spacing:-.5px}.brand span{color:#c9a66b}.brand small{display:block;color:#c9a66b;font-size:10px;letter-spacing:1.5px;margin-top:5px}.navlabel{font-size:10px;color:#89a69d;letter-spacing:1.5px;font-weight:800;padding:8px 12px}.nav button{width:100%;text-align:left;background:transparent;color:#c2d2cc;padding:12px;margin:3px 0;font-weight:550}.nav button.active,.nav button:hover{background:#1c3b32;color:#fff}.sidebottom{margin-top:auto;padding:12px;color:#a9c0b8;font-size:11px;line-height:1.5}.main{padding:30px;max-width:1500px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:23px}.eyebrow{font-size:10px;color:#c9a66b;letter-spacing:1.4px;font-weight:800;text-transform:uppercase}.top h1{font-size:26px;margin:5px 0}.userline{font-size:11px;color:#b5b1a9}.topright{display:flex;align-items:center;gap:9px}.avatar{background:#39332a;color:#e4c58e;border-radius:50%;width:36px;height:36px;display:grid;place-items:center;font-weight:800}.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:16px}.metric,.panel{background:var(--card);border:1px solid #33343a;border-radius:17px;box-shadow:var(--shadow)}.metric{padding:17px}.metric label{font-size:12px;color:#b5b1a9}.metric strong{display:block;font-size:24px;margin:11px 0 5px;letter-spacing:-.6px}.metric small{font-size:11px;color:var(--muted)}.panel{padding:18px;margin-bottom:16px;min-width:0}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:15px}.panel h2{font-size:15px;margin:0}.grid2{display:grid;grid-template-columns:1.25fr 1fr;gap:15px}.bars{height:170px;display:flex;align-items:end;gap:12px;padding:10px 6px 0;border-bottom:1px solid var(--line)}.barcol{height:100%;flex:1;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:6px}.bar{width:22px;min-height:2px;background:#c9a66b;border-radius:5px 5px 0 0}.bar.rev{background:#8f7449}.barcol span{font-size:10px;color:var(--muted)}.legend{font-size:11px;color:var(--muted);display:flex;gap:14px;margin-top:11px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#8f7449;margin-right:5px}.dot2{background:#c9a66b}.quick{display:grid;grid-template-columns:1fr 1fr;gap:9px}.quick button{text-align:left;background:#34353b;color:#f2f0eb;padding:15px;border:1px solid #414249}.quick small{display:block;color:#aaa7a0;font-weight:450;margin-top:4px}.page{display:none}.page.active{display:block}.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px}.filters input,.filters select{max-width:240px}.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}.field label{font-size:11px;font-weight:750;color:#d0cabe}.field input,.field select,.field textarea,.filters input,.filters select{width:100%;border:1px solid #45464c;border-radius:9px;padding:11px;background:#1c1d21;color:var(--ink);min-width:0}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.full{grid-column:1/-1}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;white-space:nowrap}th{text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.7px;padding:10px 9px;border-bottom:1px solid var(--line)}td{padding:12px 9px;border-bottom:1px solid #263238;font-size:12px}tr:last-child td{border-bottom:0}.pill{display:inline-block;padding:4px 8px;border-radius:30px;background:#40372a;color:#e5c58c;font-size:10px;font-weight:750}.pill.red{background:#452a2a;color:#ffaaaa}.pill.amber{background:#40372a;color:#e5c58c}.empty{text-align:center;color:var(--muted);padding:25px}.muted{color:var(--muted)}.positive{color:#d2b47e}.negative{color:var(--red)}.notice{font-size:11px;color:#b5b1a9;line-height:1.55}.modal{position:fixed;inset:0;background:#08090bd9;display:none;align-items:center;justify-content:center;padding:15px;z-index:10}.modal.open{display:flex}.dialog{background:#25262b;border-radius:17px;padding:22px;width:min(620px,100%);max-height:92vh;overflow:auto}.dialoghead{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px}.dialoghead h2{font-size:18px;margin:0}.x{background:#393a40;color:#eee9df;padding:7px 11px}.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#b9975b;color:#17181b;padding:12px 18px;border-radius:12px;box-shadow:var(--shadow);z-index:30;display:none;max-width:90%;font-size:13px}.toast.show{display:block}.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 20% 10%,#343037,#17181b 60%)}.loginbox{background:#151d22;color:#edf3f1;width:min(420px,100%);border-radius:20px;padding:28px;box-shadow:0 20px 70px #0003}.loginbox .brand{color:#edf3f1;padding:0 0 22px}.loginbox .brand span{color:#c9a66b}.loginbox h1{font-size:22px;margin:0 0 7px}.loginbox p{color:var(--muted);font-size:13px;line-height:1.5;margin:0 0 20px}.loginbox button{width:100%;margin-top:7px}.hidden{display:none!important}.balance{font-size:23px;font-weight:800}.summaryline{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:12px;color:#d5d1c9}.summaryline b{color:#f4f0e8}.summaryline:last-child{border:0}.capital-panel{background:#25262b!important;border-color:#3b3b40!important;color:#f2f0eb}.capital-panel h2{color:#f2f0eb}.capital-panel .notice{color:#b5b1a9}.capital-panel .eyebrow{color:#c9a66b}.capital-panel .gold-value{color:#d6b77e}.capital-panel .pill{background:#40372a;color:#e5c58c}.mobilebar{display:none}
+@media(max-width:850px){.app{grid-template-columns:1fr}.side{padding:12px 12px 9px;position:sticky;top:0;z-index:4}.brand{padding:0 8px 10px;font-size:18px}.brand small,.navlabel,.sidebottom{display:none}.nav{display:flex;overflow:auto;gap:4px}.nav button{white-space:nowrap;width:auto;padding:9px 11px;margin:0;font-size:12px}.main{padding:17px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2{grid-template-columns:1fr}}
+@media(max-width:520px){.main{padding:12px}.top{align-items:flex-start}.top h1{font-size:22px}.topright button{padding:9px;font-size:11px}.metric{padding:14px}.metric strong{font-size:20px}.panel{padding:14px}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.filters input,.filters select{max-width:100%;flex:1}}
+.navcards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 18px}.navcard{min-height:76px;background:#292a30;color:#eeeae2;border:1px solid #3b3c42;border-radius:14px;display:flex;align-items:center;gap:12px;padding:16px;text-align:left;transition:.15s}.navcard:hover{background:#333137;border-color:#c9a66b;transform:translateY(-1px)}.navcard.active{background:#39332b;border-color:#c9a66b;box-shadow:inset 0 0 0 1px #c9a66b55}.navcard span{color:#c9a66b;font-size:23px;min-width:26px;text-align:center}.navcard b{font-size:13px}.secondary-nav{grid-template-columns:repeat(4,minmax(0,1fr));margin:0}.secondary-nav .navcard{min-height:60px;padding:12px}.top{border-bottom:1px solid #38393f;padding-bottom:18px}.metric{background:#25262b}.metric strong{color:#f4f1eb}.panelhead .eyebrow{color:#c9a66b}
+@media(max-width:850px){.main{padding:18px}.navcards{grid-template-columns:repeat(3,minmax(0,1fr))}.secondary-nav{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.back-dashboard{font-size:11px!important;padding:9px 10px!important}.main{padding:13px}.navcards{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.navcard{min-height:64px;padding:12px}.navcard b{font-size:12px}.secondary-nav{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.back-dashboard{background:#39332b!important;color:#e5c58c!important;border:1px solid #6d5a3b!important;padding:10px 14px!important}.back-dashboard:hover{background:#494033!important}
+button:focus-visible{outline:2px solid #d6b77e;outline-offset:3px}
+.capital-panel .summaryline span{color:#d5d1c9}
+.capital-panel .summaryline b{color:#f4f0e8}
+
+.dialog{width:min(820px,calc(100vw - 28px));padding:26px;background:#24252a;border:1px solid #414249;box-shadow:0 24px 80px #000a}
+.dialoghead{position:sticky;top:-26px;background:#24252a;padding:4px 0 16px;z-index:2;border-bottom:1px solid #3b3c42}
+.dialoghead h2{font-size:21px;letter-spacing:-.3px;color:#f4f0e8}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 18px}
+.formgrid .field{min-width:0}
+.formgrid .field input,.formgrid .field select{min-height:48px;background:#191a1f;border:1px solid #45464e;color:#f4f0e8}
+.formgrid .field input:focus,.formgrid .field select:focus{border-color:#c9a66b;outline:2px solid #c9a66b33}
+.field.full{grid-column:1/-1}
+.ver-site{text-decoration:none;display:inline-flex;align-items:center;padding:11px 15px;border-radius:10px;font-weight:750}
+.site-box{margin-top:6px;padding-top:12px;border-top:1px solid #45464c}.site-box label{font-size:12px;color:#e7cf9a}.site-hint{color:#9a958c;font-size:11px}
+.tag-site,.tag-admin{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:3px 7px;border-radius:999px;margin-left:6px;vertical-align:middle}.tag-site{background:#c9a45c;color:#17181b}.tag-admin{background:#3a3b41;color:#cfc9bd}
+.ad-photo-field{border-color:#c9a45c!important;background:#2f2a20!important}
+.photo-kind{display:flex;flex-direction:column;align-items:flex-start;gap:5px;width:96px}.photo-kind .tag-site,.photo-kind .tag-admin{margin-left:0}.photo-move{width:auto!important;padding:5px 8px!important;font-size:11px;margin:0!important;background:#34353b!important;color:#eee9df!important;text-align:center!important}
+.navcards{grid-template-columns:repeat(4,minmax(0,1fr))}.nav-badge{font-style:normal;background:#c9a45c;color:#17181b;border-radius:999px;padding:1px 7px;font-size:11px;margin-left:4px}.nav-badge[hidden]{display:none}
+.acc-acoes{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.acc-acoes button,.btnlink{padding:7px 10px;font-size:12px;width:auto;margin:0}.btnlink{display:inline-block;border-radius:10px;text-decoration:none;font-weight:750}.quebra{white-space:normal;min-width:240px;max-width:420px}
+.checkgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;padding:10px;border:1px solid #45464c;border-radius:9px;background:#1c1d21}.checkitem{display:flex!important;flex-direction:row!important;align-items:center;gap:8px;font-weight:550!important;font-size:12px!important;color:#e9e4da!important}.checkitem input{width:16px!important;height:16px!important;min-height:0!important;padding:0!important;margin:0!important;flex:none}.checkitem{min-height:0!important;padding:4px 0!important}
+@media(max-width:520px){.checkgrid{grid-template-columns:1fr}}
+.photo-upload-field{padding:17px;border:1px dashed #77705f;border-radius:13px;background:#29282a}
+.photo-upload-field small{display:block;color:#b9b4aa;margin-top:7px;line-height:1.5}
+.photo-preview{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
+.photo-preview img{width:88px;height:88px;object-fit:cover;border-radius:9px;border:1px solid #555}
+.market-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.market-results{margin-top:14px;padding:14px;border:1px solid #414249;border-radius:13px;background:#202126}
+.market-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}
+.market-stat{background:#2d2e34;border-radius:10px;padding:12px}
+.market-stat small{display:block;color:#b5b1a9;font-size:11px}
+.market-stat strong{display:block;color:#e3c48d;font-size:18px;margin-top:5px}
+.market-links{display:flex;gap:8px;flex-wrap:wrap}
+.market-links a{color:#e3c48d;text-decoration:underline;font-size:12px}
+.device-thumb{width:44px;height:44px;object-fit:cover;border-radius:8px;border:1px solid #45464e;background:#1b1c20}
+@media(max-width:620px){.dialog{padding:18px}.dialoghead{top:-18px}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.market-stats{grid-template-columns:1fr}}
+
+.device-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.edit-device-btn{border:1px solid #766344!important;color:#e4c58e!important;background:#343137!important}
+.edit-device-btn:hover{background:#41392f!important}
+.existing-photos{display:flex;gap:9px;flex-wrap:wrap;margin:10px 0}
+.existing-photos img{width:82px;height:82px;object-fit:cover;border-radius:9px;border:1px solid #555}
+.photo-upload-field .photo-preview img{width:82px;height:82px}
+.edit-hint{font-size:11px;color:#c9c1b4;line-height:1.5;margin-top:6px}
+
+.formgrid select{min-height:47px;background:#191a1f;border:1px solid #45464e;color:#f4f0e8;border-radius:9px;padding:11px;width:100%;font:inherit}
+.formgrid select:focus,.formgrid input:focus{outline:2px solid #c9a66b44;border-color:#c9a66b}
+.formgrid .field label{display:block;margin-bottom:7px}
+.formgrid .field input::placeholder{color:#777982}
+
+.invoice-upload-field{padding:14px;border:1px dashed #777984;border-radius:10px;background:#1c1d22}
+.invoice-upload-field input[type=file]{width:100%;padding:10px;background:#202127;border:1px solid #484a53;border-radius:8px;color:#f4f0e8}
+.invoice-upload-field .notice{margin-top:8px;overflow-wrap:anywhere}
+.invoice-upload-field a{color:#d5b477;text-decoration:underline}
+
+.sale-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sale-actions .edit-device-btn{border-color:#8b7046;color:#e4c18a}
+
+.sales-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;align-items:end;margin:18px 0}
+.sales-filters .field{margin:0}
+.sale-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.sale-view-dialog{max-width:900px}
+.sale-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:20px 0}
+.sale-detail-item{padding:14px;border:1px solid var(--border,#3b3b42);border-radius:12px;display:flex;flex-direction:column;gap:7px;min-width:0}
+.sale-detail-item small{color:var(--muted,#aaa);text-transform:uppercase;font-size:11px;letter-spacing:.05em}
+.sale-detail-item strong{overflow-wrap:anywhere}
+@media(max-width:650px){.sale-detail-grid{grid-template-columns:1fr}.sales-filters{grid-template-columns:1fr 1fr}}
+
+.device-gallery{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0 20px}.gallery-photo{background:transparent;border:1px solid var(--border,#444);border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:7px;max-width:160px;cursor:pointer}.gallery-photo img{width:140px;height:130px;object-fit:cover;border-radius:8px}.gallery-photo small{color:var(--muted,#aaa)}.photo-lightbox{display:none;position:fixed;inset:0;z-index:9999;background:#000e;align-items:center;justify-content:center;padding:35px}.photo-lightbox.open{display:flex}.photo-lightbox img{max-width:92vw;max-height:88vh;object-fit:contain}.photo-lightbox .x{position:absolute;top:20px;right:20px}.existing-photos>div{display:inline-flex;flex-direction:column;gap:5px;margin:5px}.existing-photos small{font-size:11px;color:var(--muted,#aaa)}.dashboard-insights .grid2>.panel{margin:0}.dashboard-insights table{width:100%}
+</style>
+</head>
+<body>
+<div id="loginView" class="login">
+ <div class="loginbox">
+  <div class="brand">KGL<span> STORE</span><small>CONTROLE INTELIGENTE PARA A KGL Gestão</small></div>
+  <h1>Acesse sua loja</h1><p>Entre com seu usuário individual. Você e Kauan compartilham os mesmos dados da loja.</p>
+  <form id="loginForm">
+   <div class="field"><label>E-mail</label><input name="email" type="email" autocomplete="username" required placeholder="seu@email.com"></div>
+   <div class="field"><label>Senha</label><input name="password" type="password" autocomplete="current-password" required placeholder="Sua senha"></div>
+   <button id="loginBtn" type="submit">Entrar no KGL Gestão</button>
+  </form>
+  <p id="loginError" class="negative" style="margin-top:12px"></p>
+  <div class="notice">Acesso privado. Se ainda não confirmou seu cadastro, verifique seu e-mail.</div>
+ </div>
+</div>
+<div id="appView" class="app hidden">
+ <aside class="side">
+  <div class="brand">KGL<span> STORE</span><small>CONTROLE INTELIGENTE PARA A KGL Gestão</small></div>
+  <div class="navlabel">MENU PRINCIPAL</div>
+  <nav class="nav">
+   <button class="active" data-page="dashboard">▦ Visão geral</button>
+   <button data-page="devices">▣ Estoque</button>
+   <button data-page="sales">↗ Vendas</button>
+   <button data-page="purchases">＋ Compras</button>
+   <button data-page="cash">◉ Caixa</button>
+   <button data-page="results">▤ Resultado</button>
+   <button data-page="intelligence">✦ Inteligência</button>
+   <button data-page="goals">◎ Metas</button>
+   <button data-page="suppliers">♙ Fornecedores</button>
+   <button data-page="accessories">◈ Acessórios</button>    <button data-page="online">◎ Loja online</button>    <button data-page="backup">⇩ Backup</button>
+  </nav>
+  <div class="sidebottom">KGL Gestão • Dados sincronizados na nuvem.<br>Use sempre seu próprio login.</div>
+ </aside>
+ <main class="main">
+  <header class="top"><div><div class="eyebrow" id="storeName">KGL GESTÃO</div><h1 id="pageTitle">Visão geral</h1><div class="userline" id="userEmail"></div></div><div class="topright"><button class="secondary back-dashboard" id="backDashboard" type="button" aria-label="Voltar ao painel">← Painel</button><a class="secondary ver-site" href="../" title="Abrir o site KGL Store">Ver site ↗</a><div class="avatar" id="avatar">V</div><button class="secondary" id="logoutBtn">Sair</button></div></header>
+  <section id="dashboard" class="page active">
+   <div class="navcards">
+    <button class="navcard" data-page="dashboard"><span>▦</span><b>Painel</b></button>
+    <button class="navcard" data-page="devices"><span>▣</span><b>Estoque</b></button>
+    <button class="navcard" data-page="purchases"><span>＋</span><b>Compras</b></button>
+    <button class="navcard" data-page="sales"><span>↗</span><b>Vendas</b></button>
+    <button class="navcard" data-page="cash"><span>◉</span><b>Financeiro</b></button>
+    <button class="navcard" data-page="results"><span>▤</span><b>Relatórios</b></button>
+    <button class="navcard" data-page="accessories"><span>◈</span><b>Acessórios</b></button>
+    <button class="navcard" data-page="online"><span>◎</span><b>Loja online <i class="nav-badge" data-online-badge hidden></i></b></button>
+   </div>
+   <div class="cards">
+    <div class="metric"><label>Faturamento acumulado</label><strong id="dRevenue">R$ 0,00</strong><small>Total das vendas registradas</small></div>
+    <div class="metric"><label>Lucro bruto</label><strong id="dGross">R$ 0,00</strong><small>Vendas menos custo dos aparelhos</small></div>
+    <div class="metric"><label>Estoque a custo</label><strong id="dStock">R$ 0,00</strong><small id="dUnits">0 aparelhos disponíveis</small></div>
+    <div class="metric"><label>Dinheiro em caixa</label><strong id="dCash">R$ 0,00</strong><small>Capital + entradas − saídas pagas</small></div>
+   </div>
+   <div class="panel dashboard-insights">
+    <div class="panelhead"><div><h2>Inteligência de vendas</h2><div class="notice">Indicadores calculados com vendas reais no período selecionado.</div></div><small class="muted" id="dashUpdated">Atualizado agora</small></div>
+    <div class="sales-filters">
+     <div class="field"><label>Período</label><select id="dashPeriod" onchange="applyDashboardPeriod()"><option value="all">Todo o período</option><option value="day">Hoje</option><option value="week">Esta semana</option><option value="month" selected>Este mês</option><option value="year">Este ano</option><option value="custom">Personalizado</option></select></div>
+     <div class="field"><label>De</label><input id="dashFrom" type="date" onchange="renderDashboardInsights()"></div>
+     <div class="field"><label>Até</label><input id="dashTo" type="date" onchange="renderDashboardInsights()"></div>
+     <div class="field"><label>Canal</label><select id="dashChannel" onchange="renderDashboardInsights()"><option value="">Todos</option><option>OLX</option><option>Site</option><option>WhatsApp</option><option>Instagram</option><option>Facebook Marketplace</option><option>Indicação</option><option>Outro</option></select></div>
+     <div class="field"><label>Modelo</label><select id="dashModel" onchange="renderDashboardInsights()"><option value="">Todos</option></select></div>
+     <div class="field"><label>Vendedor</label><select id="dashSeller" onchange="renderDashboardInsights()"><option value="">Todos</option></select></div>
+     <div class="field"><label>Status</label><select id="dashStatus" onchange="renderDashboardInsights()"><option value="">Todos</option><option value="paid">Recebido</option><option value="pending">A receber</option></select></div>
+     <button class="secondary" onclick="clearDashboardFilters()">Limpar filtros</button>
+    </div>
+    <div class="cards">
+     <div class="metric"><label>Canal com mais vendas</label><strong id="dashTopCount">Dados insuficientes</strong></div>
+     <div class="metric"><label>Maior faturamento</label><strong id="dashTopRevenue">Dados insuficientes</strong></div>
+     <div class="metric"><label>Melhor lucro médio</label><strong id="dashTopProfit">Dados insuficientes</strong></div>
+     <div class="metric"><label>Ticket médio</label><strong id="dashTicket">R$ 0,00</strong></div>
+     <div class="metric"><label>Margem média</label><strong id="dashMargin">—</strong></div>
+     <div class="metric"><label>Tempo médio em estoque</label><strong id="dashStockDays">Dados insuficientes</strong></div>
+    </div>
+    <div class="grid2" style="margin-top:16px"><div class="panel"><h3>Vendas por plataforma</h3><div id="dashChannelRows" class="notice">Dados insuficientes.</div></div><div class="panel"><h3>Insights automáticos</h3><div id="dashInsights" class="notice">Ainda não há dados suficientes para gerar insights.</div></div></div>
+    <p class="notice">Conversão por canal só será calculada quando houver cadastro de contatos/leads. A última atualização usa os dados carregados do banco.</p>
+   </div>
+   <div class="panel capital-panel">
+    <div class="panelhead"><div><div class="eyebrow">Capital de giro</div><h2 style="font-size:18px;margin-top:5px">Disponível para comprar novos iPhones</h2><div class="notice">Saldo financeiro real: capital inicial + recebimentos − compras pagas − despesas pagas.</div></div><span class="pill">Reinvestimento</span></div>
+    <div class="balance gold-value" id="dReinvest">R$ 0,00</div>
+    <div class="summaryline"><span>Capital inicial e aportes registrados</span><b id="dCapital">R$ 0,00</b></div>
+    <div class="summaryline"><span>Vendas efetivamente recebidas</span><b id="dSalesIn">R$ 0,00</b></div>
+    <div class="summaryline"><span>Outras entradas</span><b id="dOtherIn">R$ 0,00</b></div>
+    <div class="summaryline"><span>Compras de aparelhos pagas</span><b id="dPurchasesOut">R$ 0,00</b></div>
+    <div class="summaryline"><span>Despesas e outras saídas</span><b id="dOtherOut">R$ 0,00</b></div>
+    <p class="notice" style="margin-bottom:10px">Se a loja começou com dinheiro próprio, registre esse valor uma única vez como Capital inicial. Sem esse aporte, o saldo ficará menor do que o dinheiro efetivamente disponível.</p><button class="secondary" type="button" onclick="openInitialCapitalForm()">＋ Registrar capital inicial</button><p class="notice" style="margin:10px 0 0">Compras e despesas pendentes não reduzem o saldo até serem pagas. Reserve esses valores antes de reinvestir.</p>
+   </div>
+   <div class="panel"><div class="panelhead"><h2>Ferramentas da loja</h2></div><div class="navcards secondary-nav">
+    <button class="navcard" data-page="intelligence"><span>✦</span><b>KGL Intelligence</b></button>
+    <button class="navcard" data-page="goals"><span>◎</span><b>Metas</b></button>
+    <button class="navcard" data-page="suppliers"><span>♙</span><b>Fornecedores</b></button>
+    <button class="navcard" data-page="backup"><span>⇩</span><b>Backup</b></button>
+   </div></div>
+   <div class="panel"><div class="panelhead"><div><h2>Alertas de estoque</h2><div class="notice">Aparelhos disponíveis há mais de 30 dias, para revisar preço e estratégia.</div></div><span class="pill amber" id="stockAlertCount">0 alertas</span></div><div id="stockAlerts" class="notice">Nenhum aparelho parado há mais de 30 dias.</div></div>
+   <div class="grid2">
+    <div class="panel"><div class="panelhead"><h2>Vendas dos últimos 6 meses</h2><span class="muted">R$</span></div><div class="bars" id="chart"></div><div class="legend"><span><i class="dot"></i>Faturamento</span><span><i class="dot dot2"></i>Lucro bruto</span></div></div>
+    <div class="panel"><div class="panelhead"><h2>Ações rápidas</h2></div><div class="quick"><button onclick="openForm('purchase')">＋ Comprar iPhone<small>Registrar aquisição e entrada no estoque</small></button><button onclick="openForm('sale')">↗ Vender iPhone<small>Registrar venda e baixar estoque</small></button><button onclick="openForm('expense')">− Lançar despesa<small>Frete, taxa, embalagem etc.</small></button><button onclick="openForm('income')">＋ Capital / entrada<small>Registrar saldo inicial ou novo aporte</small></button></div></div>
+   </div>
+   <div class="panel"><div class="panelhead"><h2>Últimas movimentações</h2><button class="secondary" onclick="showPage('cash')">Ver caixa</button></div><div class="tablewrap"><table><thead><tr><th>Data</th><th>Movimentação</th><th>Valor</th><th>Status</th></tr></thead><tbody id="recentRows"></tbody></table></div></div>
+  </section>
+  <section id="devices" class="page"><div class="panel"><div class="panelhead"><div><h2>Estoque de iPhones</h2><div class="notice">Cada aparelho é controlado individualmente pelo IMEI.</div></div><button onclick="openForm('purchase')">＋ Registrar compra</button></div><div class="filters"><input id="deviceSearch" placeholder="Buscar modelo, IMEI, cor..." oninput="renderDevices()"><select id="deviceFilter" onchange="renderDevices()"><option value="all">Todos</option><option value="in_stock">Disponíveis</option><option value="reserved">Reservados</option></select></div><div class="tablewrap"><table><thead><tr><th>Nº</th><th>Foto</th><th>Aparelho</th><th>IMEI</th><th>Bateria</th><th>Custo</th><th>Preço desejado</th><th>Status</th><th></th></tr></thead><tbody id="deviceRows"></tbody></table></div></div></section>
+  <section id="sales" class="page"><div class="panel"><div class="panelhead"><div><h2>Vendas</h2><div class="notice">Faturamento, custo e lucro por aparelho.</div></div><button onclick="openForm('sale')">＋ Registrar venda</button></div><div class="sales-filters"><div class="field"><label>Buscar aparelho / cliente</label><input id="salesSearch" placeholder="Modelo, IMEI ou cliente" oninput="renderSales()"></div><div class="field"><label>Canal</label><select id="salesChannelFilter" onchange="renderSales()"><option value="">Todos</option><option>OLX</option><option>Site</option><option>WhatsApp</option><option>Instagram</option><option>Facebook Marketplace</option><option>Indicação</option><option>Outro</option></select></div><div class="field"><label>Pagamento</label><select id="salesPaymentFilter" onchange="renderSales()"><option value="">Todos</option><option value="Pix">Pix</option><option value="Dinheiro">Dinheiro</option><option value="Cartão de débito">Cartão de débito</option><option value="Cartão de crédito">Cartão de crédito</option><option value="Transferência">Transferência</option><option value="Outro">Outro</option></select></div><div class="field"><label>Recebimento</label><select id="salesStatusFilter" onchange="renderSales()"><option value="">Todos</option><option value="paid">Recebido</option><option value="pending">Pendente</option></select></div><div class="field"><label>De</label><input id="salesFrom" type="date" onchange="renderSales()"></div><div class="field"><label>Até</label><input id="salesTo" type="date" onchange="renderSales()"></div><div class="field"><label>Vendedor</label><select id="salesSellerFilter" onchange="renderSales()"><option value="">Todos</option></select></div><button class="secondary" onclick="clearSalesFilters()">Limpar filtros</button><button class="secondary" onclick="exportSalesCsv()">Exportar CSV</button></div><div class="tablewrap"><table><thead><tr><th>Data</th><th>Aparelho</th><th>Cliente</th><th>Canal</th><th>Venda</th><th>Líquido</th><th>Custo</th><th>Lucro líquido</th><th>Recebimento</th><th>Ações</th></tr></thead><tbody id="salesRows"></tbody></table></div></div></section>
+  <section id="purchases" class="page"><div class="panel"><div class="panelhead"><div><h2>Compras</h2><div class="notice">Histórico de aparelhos adquiridos.</div></div><button onclick="openForm('purchase')">＋ Registrar compra</button></div><div class="tablewrap"><table><thead><tr><th>Data</th><th>Aparelho</th><th>Fornecedor</th><th>Custo</th><th>Pagamento</th></tr></thead><tbody id="purchaseRows"></tbody></table></div></div></section>
+  <section id="cash" class="page"><div class="cards"><div class="metric"><label>Entradas recebidas</label><strong id="cIn">R$ 0,00</strong><small>Vendas recebidas + capital + outras entradas</small></div><div class="metric"><label>Saídas pagas</label><strong id="cOut">R$ 0,00</strong><small>Compras de aparelhos + despesas pagas</small></div><div class="metric"><label>Dinheiro disponível</label><strong id="cBalance">R$ 0,00</strong><small>Saldo após entradas e saídas registradas</small></div><div class="metric"><label>A receber</label><strong id="cPending">R$ 0,00</strong><small>Vendas pendentes</small></div></div><div class="panel"><div class="panelhead"><div><h2>Movimentações do caixa</h2><div class="notice">Registre o capital que vocês colocaram para iniciar a loja. Isso evita que o saldo fique negativo por falta do aporte inicial.</div></div><div><button class="secondary" onclick="openInitialCapitalForm()">＋ Capital inicial</button> <button class="secondary" onclick="openForm('income')">＋ Entrada</button> <button onclick="openForm('expense')">− Despesa</button></div></div><div class="tablewrap"><table><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th>Tipo</th></tr></thead><tbody id="cashRows"></tbody></table></div></div>
+   <div class="panel"><div class="panelhead"><h2>Simulador de taxas de cartão</h2><span class="pill">Simulação</span></div><div class="formgrid"><div class="field"><label>Quanto você quer receber líquido? (R$)</label><input id="feeDesiredNet" type="number" min="0.01" step=".01" value="3750" oninput="calcCardFee()"></div><div class="field"><label>Tipo</label><select id="feeType" onchange="calcCardFee()"><option>Débito</option><option selected>Crédito</option></select></div><div class="field"><label>Parcelas</label><select id="feeInstallments" onchange="calcCardFee()"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option><option>10</option><option>12</option></select></div><div class="field"><label>Taxa total do plano (%)</label><input id="feePercent" type="number" min="0" step=".01" value="4" oninput="calcCardFee()"></div></div><div class="cards"><div class="metric"><label>Taxa em R$</label><strong id="feeValue">R$ 0,00</strong></div><div class="metric"><label>Valor que cobrar do cliente</label><strong id="feeGrossOut">R$ 0,00</strong></div><div class="metric"><label>Parcela do cliente</label><strong id="feeEach">R$ 0,00</strong></div><div class="metric"><label>Você recebe líquido</label><strong id="feeNet">R$ 0,00</strong></div></div><p class="notice">Informe a taxa efetiva total do plano conforme o contrato da adquirente. O simulador calcula o valor bruto necessário para que, após o desconto da taxa, você receba o líquido desejado. Confirme também o prazo de recebimento com a operadora.</p></div>
+  </section>
+  <section id="results" class="page"><div class="cards"><div class="metric"><label>Faturamento</label><strong id="rRevenue">R$ 0,00</strong><small>Valor total vendido</small></div><div class="metric"><label>Custo vendido</label><strong id="rCost">R$ 0,00</strong><small>Custo de aquisição dos aparelhos</small></div><div class="metric"><label>Lucro bruto</label><strong id="rGross">R$ 0,00</strong><small>Faturamento menos custo</small></div><div class="metric"><label>Lucro líquido estimado</label><strong id="rNet">R$ 0,00</strong><small>Lucro bruto menos despesas</small></div></div><div class="grid2"><div class="panel"><h2>Indicadores</h2><div class="summaryline">Quantidade de vendas <b id="rCount">0</b></div><div class="summaryline">Ticket médio <b id="rTicket">R$ 0,00</b></div><div class="summaryline">Margem bruta <b id="rMargin">0%</b></div><div class="summaryline">Despesas operacionais <b id="rExpenses">R$ 0,00</b></div></div><div class="panel"><h2>Como interpretar</h2><p class="notice">Faturamento é o valor total vendido. Lucro bruto é o faturamento menos o custo de aquisição dos aparelhos vendidos. Lucro líquido estimado desconta também as despesas operacionais cadastradas. O saldo de caixa considera somente dinheiro efetivamente recebido e pago. Impostos, tarifas e outros custos precisam ser registrados para aproximar o resultado real.</p></div></div><div class="panel channel-report-panel"><div class="panelhead"><div><h2>Desempenho por canal de venda</h2><div class="notice">Compare quantidade de vendas, faturamento e lucro líquido por origem.</div></div><button class="secondary" onclick="exportChannelReportCsv()">Exportar relatório</button></div><div class="cards"><div class="metric"><label>Vendas nos canais</label><strong id="channelCount">0</strong></div><div class="metric"><label>Faturamento bruto</label><strong id="channelRevenue">R$ 0,00</strong></div><div class="metric"><label>Lucro líquido</label><strong id="channelProfit">R$ 0,00</strong></div></div><div class="tablewrap"><table><thead><tr><th>Canal</th><th>Qtd. vendas</th><th>Faturamento</th><th>Valor líquido</th><th>Lucro líquido</th></tr></thead><tbody id="channelReportRows"></tbody></table></div></div></section>
+  <section id="intelligence" class="page">
+   <div class="panel">
+    <div class="panelhead"><div><div class="eyebrow">KGL Intelligence</div><h2>Analisador inteligente de oportunidades</h2><div class="notice">Simule uma compra antes de comprometer o caixa.</div></div><span class="pill">Simulador</span></div>
+    <div class="formgrid">
+     <div class="field"><label>Modelo</label><input id="iModel" value="iPhone 15"></div>
+     <div class="field"><label>Armazenamento</label><select id="iStorage"><option>128 GB</option><option selected>256 GB</option><option>512 GB</option><option>1 TB</option></select></div>
+     <div class="field"><label>Cor</label><input id="iColor" value="Branco"></div>
+     <div class="field"><label>Preço pedido (R$)</label><input id="iCost" type="number" min="0" step=".01" value="2000"></div>
+     <div class="field"><label>Saúde da bateria (%)</label><input id="iBattery" type="number" min="1" max="100" value="80"></div>
+     <div class="field"><label>Condição física</label><select id="iCondition"><option value="excellent">Excelente</option><option value="good" selected>Boa, marcas leves</option><option value="fair">Marcas/avarias</option><option value="repair">Precisa de reparo</option></select></div>
+     <div class="field"><label>Nota fiscal</label><select id="iInvoice"><option value="yes">Sim</option><option value="no">Não</option></select></div>
+     <div class="field"><label>Caixa original</label><select id="iBox"><option value="yes">Sim</option><option value="no">Não</option></select></div>
+     <div class="field"><label>Acessórios</label><select id="iAccessories"><option value="yes">Com acessórios</option><option value="no">Sem acessórios</option></select></div>
+     <div class="field"><label>IMEI verificado?</label><select id="iImei"><option value="yes">Sim, sem restrições</option><option value="no">Não verificado</option></select></div>
+     <div class="field"><label>Reparos estimados (R$)</label><input id="iRepair" type="number" min="0" step=".01" value="0"></div>
+     <div class="field"><label>Margem desejada (%)</label><input id="iMargin" type="number" min="1" max="90" value="15"></div>
+     <div class="field"><label>Outros custos (R$)</label><input id="iOther" type="number" min="0" step=".01" value="0"></div>
+    </div>
+    <div class="market-actions"><button class="secondary" type="button" onclick="searchMarketPrices()">⌕ Buscar preços nos marketplaces</button><button type="button" onclick="analyzeDeal()">✦ Analisar oportunidade</button></div>
+    <div id="marketResults" class="market-results"><div class="notice">A busca automática consulta anúncios usados pela API pública do Mercado Livre. Também oferecemos atalhos para comparar OLX e Amazon; esses dois sites ainda não entram na média automática.</div></div>
+   </div>
+   <div class="panel hidden" id="intelResult"><div class="panelhead"><h2>Resultado da análise</h2><span id="intelVerdict" class="pill">—</span></div><div class="cards"><div class="metric"><label>Preço máximo de compra</label><strong id="iMax">—</strong></div><div class="metric"><label>Preço sugerido de anúncio</label><strong id="iAsk">—</strong></div><div class="metric"><label>Lucro estimado</label><strong id="iProfit">—</strong></div><div class="metric"><label>Margem estimada</label><strong id="iMarginOut">—</strong></div></div><div class="grid2"><div><h2>Pontos fortes</h2><ul id="iPros"></ul></div><div><h2>Pontos de atenção</h2><ul id="iCons"></ul></div></div><p id="iExplanation" class="notice"></p></div>
+  </section>
+  <section id="goals" class="page"><div class="panel"><div class="panelhead"><div><h2>Metas mensais</h2><div class="notice">Acompanhe faturamento e lucro realizado.</div></div><button onclick="openGoalForm()">＋ Nova meta</button></div><div id="goalCards" class="cards"></div><div class="tablewrap"><table><thead><tr><th>Mês</th><th>Meta faturamento</th><th>Realizado</th><th>Meta lucro</th><th>Lucro realizado</th><th>Progresso</th></tr></thead><tbody id="goalRows"></tbody></table></div></div></section>
+  <section id="suppliers" class="page"><div class="panel"><div class="panelhead"><div><h2>Histórico de fornecedores</h2><div class="notice">Compare volume, custo médio e última compra.</div></div><button onclick="openSupplierForm()">＋ Fornecedor</button></div><div class="tablewrap"><table><thead><tr><th>Fornecedor</th><th>Compras</th><th>Total comprado</th><th>Custo médio</th><th>Última compra</th></tr></thead><tbody id="supplierRows"></tbody></table></div></div></section>
+  <section id="backup" class="page"><div class="panel"><div class="eyebrow">Segurança dos dados</div><h2>Backup da KGL Gestão</h2><p class="notice">Baixe uma cópia dos registros disponíveis em JSON. Este arquivo não inclui fotos armazenadas no Supabase Storage.</p><button onclick="downloadBackup()">⇩ Baixar backup dos dados</button><p id="backupStatus" class="notice"></p></div></section>
+
+  <section id="accessories" class="page">
+   <div class="cards"><div class="metric"><label>Unidades em estoque</label><strong id="accUnits">0 un.</strong><small>Todos os acessórios</small></div><div class="metric"><label>Estoque a custo</label><strong id="accStockValue">R$ 0,00</strong><small>Custo médio × unidades</small></div><div class="metric"><label>Vendas no mês</label><strong id="accMonthRevenue">R$ 0,00</strong><small>Acessórios vendidos neste mês</small></div><div class="metric"><label>Lucro no mês</label><strong id="accMonthProfit">R$ 0,00</strong><small>Venda − custo médio − descontos</small></div></div>
+   <div class="panel"><div class="panelhead"><div><h2>Acessórios</h2><div class="notice">Capinhas, películas, cabos, carregadores... O estoque sobe nas compras e desce nas vendas sozinho.</div></div><div class="acc-acoes"><button class="secondary" onclick="accCompraForm()">＋ Compra</button><button class="secondary" onclick="accVendaForm()">↗ Venda</button><button onclick="accForm()">＋ Novo produto</button></div></div>
+    <div class="filters"><input id="accSearch" placeholder="Buscar nome, cor, modelo compatível..." oninput="renderAccessories()"><select id="accCat" onchange="renderAccessories()"></select><select id="accMarca" onchange="renderAccessories()"></select></div>
+    <div class="tablewrap"><table><thead><tr><th>Foto</th><th>Produto</th><th>Compatível</th><th>Estoque</th><th>Custo médio</th><th>Preço</th><th>Site</th><th></th></tr></thead><tbody id="accRows"><tr><td colspan="8" class="empty">Carregando...</td></tr></tbody></table></div></div>
+   <div class="panel"><div class="panelhead"><div><h2>Compras e vendas de acessórios</h2><div class="notice">Excluir corrige o estoque e o caixa automaticamente.</div></div></div>
+    <div class="tablewrap"><table><thead><tr><th>Data</th><th>Tipo</th><th>Produto</th><th>Qtd.</th><th>Valor</th><th>Detalhes</th><th></th></tr></thead><tbody id="accMoveRows"></tbody></table></div></div>
+  </section>
+  <section id="online" class="page">
+   <div class="cards"><div class="metric"><label>Visitas (30 dias)</label><strong id="oVisits">0</strong><small>Aberturas de anúncios e páginas</small></div><div class="metric"><label>Cliques no WhatsApp</label><strong id="oClicks">0</strong><small>Pessoas que chamaram pelo site</small></div><div class="metric"><label>Conversão</label><strong id="oConv">—</strong><small>Cliques ÷ visitas</small></div><div class="metric"><label>Compartilhamentos</label><strong id="oShares">0</strong><small>Anúncios enviados para alguém</small></div></div>
+   <div class="panel"><div class="panelhead"><div><h2>Avise-me quando chegar</h2><div class="notice">Clientes que pediram aviso pelo site. Chame pelo WhatsApp quando comprar o modelo.</div></div></div>
+    <div class="tablewrap"><table><thead><tr><th>Data</th><th>Cliente</th><th>Procura</th><th>WhatsApp</th><th>Status</th><th></th></tr></thead><tbody id="alertRows"></tbody></table></div></div>
+   <div class="panel"><div class="panelhead"><div><h2>Visitas e cliques por anúncio</h2><div class="notice">Últimos 30 dias. Muita visita e pouco clique costuma indicar preço ou fotos para rever.</div></div></div>
+    <div class="tablewrap"><table><thead><tr><th>Anúncio</th><th>Tipo</th><th>Visitas</th><th>Cliques WhatsApp</th><th>Compart.</th><th>Conversão</th></tr></thead><tbody id="onlineRows"></tbody></table></div></div>
+   <div class="panel"><div class="panelhead"><div><h2>Depoimentos de clientes</h2><div class="notice">Aparecem na página inicial do site.</div></div><button onclick="depoimentoForm()">＋ Depoimento</button></div>
+    <div class="tablewrap"><table><thead><tr><th>Cliente</th><th>Nota</th><th>Texto</th><th>Site</th><th></th></tr></thead><tbody id="testRows"></tbody></table></div></div>
+  </section>
+ </main>
+</div>
+<div class="modal" id="xModal"><div class="dialog"><div class="dialoghead"><h2 id="xTitle"></h2><button class="x" type="button" onclick="xClose()">✕</button></div><form id="xForm"><div id="xFields"></div><div class="actions"><button type="button" class="secondary" onclick="xClose()">Cancelar</button><button id="xSave" type="submit">Salvar</button></div></form></div></div>
+<div class="modal" id="modal"><div class="dialog"><div class="dialoghead"><h2 id="modalTitle"></h2><button class="x" onclick="closeForm()">✕</button></div><form id="dataForm"><div id="formFields"></div><div class="actions"><button type="button" class="secondary" onclick="closeForm()">Cancelar</button><button id="saveBtn" type="submit">Salvar</button></div></form></div></div>
+<div id="toast" class="toast"></div>
+<script>
+const SUPABASE_URL="https://SEU-PROJETO.supabase.co";
+const SUPABASE_KEY="SUA_CHAVE_PUBLISHABLE";
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let goals=[],suppliers=[],devicePhotoUrls={},marketStats=null,session=null,user=null,storeId=null,role=null,storeLabel="KGL Gestão",devices=[],sales=[],purchases=[],expenses=[],moves=[],channel=null;
+const $=id=>document.getElementById(id),money=n=>(Number(n)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}),dateNow=()=>new Date().toISOString().slice(0,10),fmt=d=>d?new Date(d+'T12:00:00').toLocaleDateString('pt-BR'):'—';
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function toast(s){$('toast').textContent=s;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),3500)}
+function showPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===p));document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===p));$('pageTitle').textContent=({dashboard:'Visão geral',devices:'Estoque',sales:'Vendas',purchases:'Compras',cash:'Caixa',results:'Resultado',intelligence:'KGL Intelligence',goals:'Metas mensais',suppliers:'Fornecedores',backup:'Backup',accessories:'Acessórios',online:'Loja online'})[p]}
+document.addEventListener('click',e=>{const nav=e.target.closest('[data-page]');if(nav){e.preventDefault();showPage(nav.dataset.page)}});
+$('backDashboard').addEventListener('click',()=>showPage('dashboard'));
+async function boot(){const {data:{session:s}}=await sb.auth.getSession();if(s){session=s;user=s.user;await enterApp()}else{$('loginView').classList.remove('hidden')}}
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();$('loginError').textContent='';$('loginBtn').disabled=true;$('loginBtn').textContent='Entrando...';const f=new FormData(e.target);const {data,error}=await sb.auth.signInWithPassword({email:f.get('email'),password:f.get('password')});$('loginBtn').disabled=false;$('loginBtn').textContent='Entrar no KGL Gestão';if(error){$('loginError').textContent=error.message;return}session=data.session;user=data.user;await enterApp()});
+$('logoutBtn').onclick=async()=>{if(channel)await sb.removeChannel(channel);await sb.auth.signOut();location.reload()};
+sb.auth.onAuthStateChange(async(event,s)=>{if(event==='SIGNED_OUT'){ $('appView').classList.add('hidden');$('loginView').classList.remove('hidden')}});
+async function enterApp(){try{$('loginView').classList.add('hidden');$('appView').classList.remove('hidden');$('userEmail').textContent=user.email||'';$('avatar').textContent=(user.email||'V').slice(0,1).toUpperCase();
+let {data:mem,error}=await sb.from('store_members').select('store_id,role').eq('user_id',user.id).limit(1).maybeSingle();if(error)throw error;if(!mem){throw new Error('Este usuário ainda não está vinculado à loja KGL Gestão. Confira o cadastro em store_members.')}storeId=mem.store_id;role=mem.role;
+let {data:st,error:se}=await sb.from('stores').select('name').eq('id',storeId).single();if(se)throw se;storeLabel=st.name;$('storeName').textContent='KGL Gestão • '+(role==='owner'?'ADMINISTRADORA':'MEMBRO');
+await loadAll();subscribe();}catch(err){toast('Não foi possível abrir a loja: '+err.message);console.error(err)}}
+async function loadAll(){const tables=['devices','sales','purchases','expenses','cash_movements'];const results=await Promise.all(tables.map(t=>sb.from(t).select('*').eq('store_id',storeId).order(t==='devices'?'created_at':t==='sales'?'sale_date':t==='purchases'?'purchase_date':t==='expenses'?'expense_date':'movement_date',{ascending:false})));for(let i=0;i<results.length;i++){if(results[i].error)throw results[i].error} [devices,sales,purchases,expenses,moves]=results.map(r=>r.data||[]);const [g,s,ph]=await Promise.all([sb.from('monthly_goals').select('*').eq('store_id',storeId).order('month',{ascending:false}),sb.from('suppliers').select('*').eq('store_id',storeId).order('name'),sb.from('device_photos').select('device_id,storage_path,sort_order,para_anuncio').eq('store_id',storeId).order('para_anuncio',{ascending:false}).order('sort_order')]);goals=g.error?[]:(g.data||[]);suppliers=s.error?[]:(s.data||[]);devicePhotoUrls={};if(!ph.error){for(const photo of (ph.data||[])){if(!devicePhotoUrls[photo.device_id]){const {data}=await sb.storage.from('kgl-device-photos').createSignedUrl(photo.storage_path,3600);devicePhotoUrls[photo.device_id]=data?.signedUrl||null}}}renderAll();if(!$('dashFrom').value&&!$('dashTo').value)applyDashboardPeriod()}
+function subscribe(){if(channel)sb.removeChannel(channel);channel=sb.channel('vendemais-'+storeId).on('postgres_changes',{event:'*',schema:'public'},()=>loadAll().catch(e=>console.error(e))).subscribe()}
+function calc(){const revenue=sales.reduce((a,s)=>a+Number(s.total_amount||0),0),sold=devices.filter(d=>d.status==='sold'),cost=sold.reduce((a,d)=>a+Number(d.cost_price||0),0),gross=revenue-cost,exp=expenses.reduce((a,e)=>a+Number(e.amount||0),0),stock=devices.filter(d=>d.status==='in_stock'||d.status==='reserved').reduce((a,d)=>a+Number(d.cost_price||0),0),ins=moves.filter(m=>m.movement_type==='in').reduce((a,m)=>a+Number(m.amount),0),outs=moves.filter(m=>m.movement_type==='out').reduce((a,m)=>a+Number(m.amount),0),pending=sales.filter(s=>s.payment_status!=='paid').reduce((a,s)=>a+Number(s.total_amount||0),0),capital=moves.filter(m=>m.movement_type==='in'&&/capital|aporte/i.test(m.category||'')).reduce((a,m)=>a+Number(m.amount),0),salesIn=moves.filter(m=>m.movement_type==='in'&&m.sale_id).reduce((a,m)=>a+Number(m.amount),0),otherIn=ins-capital-salesIn,purchasesOut=moves.filter(m=>m.movement_type==='out'&&m.purchase_id).reduce((a,m)=>a+Number(m.amount),0),otherOut=outs-purchasesOut;return{revenue,cost,gross,exp,net:gross-exp,stock,units:devices.filter(d=>d.status==='in_stock').length,ins,outs,cash:ins-outs,pending,capital,salesIn,otherIn,purchasesOut,otherOut}}
+
+function applyDashboardPeriod(){const v=$('dashPeriod')?.value||'all',now=new Date(),iso=d=>{const x=new Date(d.getTime()-d.getTimezoneOffset()*60000);return x.toISOString().slice(0,10)};let from='',to=iso(now);if(v==='day')from=to;else if(v==='week'){const d=new Date(now);d.setDate(d.getDate()-((d.getDay()+6)%7));from=iso(d)}else if(v==='month')from=iso(new Date(now.getFullYear(),now.getMonth(),1));else if(v==='year')from=iso(new Date(now.getFullYear(),0,1));else if(v==='all')to='';$('dashFrom').value=from;$('dashTo').value=to;renderDashboardInsights()}
+function clearDashboardFilters(){['dashChannel','dashModel','dashSeller','dashStatus'].forEach(id=>$(id).value='');$('dashPeriod').value='all';$('dashFrom').value='';$('dashTo').value='';renderDashboardInsights()}
+function renderDashboardInsights(){const from=$('dashFrom')?.value||'',to=$('dashTo')?.value||'',channel=$('dashChannel')?.value||'',model=$('dashModel')?.value||'',seller=$('dashSeller')?.value||'',status=$('dashStatus')?.value||'';const modelSel=$('dashModel'),sellerSel=$('dashSeller');if(modelSel){const val=modelSel.value;const names=[...new Set(devices.map(d=>d.model).filter(Boolean))].sort();modelSel.innerHTML='<option value="">Todos</option>'+names.map(x=>`<option ${x===val?'selected':''}>${esc(x)}</option>`).join('')}if(sellerSel){const val=sellerSel.value;const names=[...new Set(sales.map(x=>x.seller_name).filter(Boolean))];sellerSel.innerHTML='<option value="">Todos</option>'+names.map(x=>`<option ${x===val?'selected':' '}>${esc(x)}</option>`).join('')}const list=sales.filter(x=>{const d=devices.find(y=>y.sale_id===x.id);return (!from||x.sale_date>=from)&&(!to||x.sale_date<=to)&&(!channel||x.channel===channel)&&(!model||d?.model===model)&&(!seller||x.seller_name===seller)&&(!status||x.payment_status===status)});const by={};list.forEach(x=>{const k=x.channel==='Outro'?(x.channel_other||'Outro'):(x.channel||'Não informado');const d=devices.find(y=>y.sale_id===x.id),gross=Number(x.total_amount||0),net=Number(x.net_amount??(gross-Number(x.discount_amount||0)-Number(x.fee_amount||0))),profit=net-Number(d?.cost_price||0);if(!by[k])by[k]={count:0,gross:0,net:0,profit:0};by[k].count++;by[k].gross+=gross;by[k].net+=net;by[k].profit+=profit});const entries=Object.entries(by),count=list.length,gross=list.reduce((a,x)=>a+Number(x.total_amount||0),0),net=list.reduce((a,x)=>a+Number(x.net_amount??(Number(x.total_amount||0)-Number(x.discount_amount||0)-Number(x.fee_amount||0))),0),profit=entries.reduce((a,x)=>a+x[1].profit,0),topCount=[...entries].sort((a,b)=>b[1].count-a[1].count)[0],topRevenue=[...entries].sort((a,b)=>b[1].gross-a[1].gross)[0],topMargin=[...entries].sort((a,b)=>(b[1].count?b[1].profit/b[1].count:0)-(a[1].count?a[1].profit/a[1].count:0))[0];$('dashTopCount').textContent=topCount?topCount[0]+' ('+topCount[1].count+')':'Dados insuficientes';$('dashTopRevenue').textContent=topRevenue?topRevenue[0]+' • '+money(topRevenue[1].gross):'Dados insuficientes';$('dashTopProfit').textContent=topMargin?topMargin[0]+' • '+money(topMargin[1].profit/topMargin[1].count):'Dados insuficientes';$('dashTicket').textContent=count?money(gross/count):'R$ 0,00';$('dashMargin').textContent=net?(profit/net*100).toFixed(1)+'%':'—';const durations=list.map(x=>{const d=devices.find(y=>y.sale_id===x.id);if(!d?.created_at||!x.sale_date)return null;return Math.max(0,Math.floor((new Date(x.sale_date+'T12:00:00')-new Date(d.created_at))/86400000))}).filter(x=>x!==null);$('dashStockDays').textContent=durations.length?(durations.reduce((a,b)=>a+b,0)/durations.length).toFixed(1)+' dias':'Dados insuficientes';$('dashChannelRows').innerHTML=entries.length?'<table><thead><tr><th>Canal</th><th>Vendas</th><th>Faturamento</th><th>Lucro líquido</th></tr></thead><tbody>'+entries.sort((a,b)=>b[1].count-a[1].count).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${v.count}</td><td>${money(v.gross)}</td><td>${money(v.profit)}</td></tr>`).join('')+'</tbody></table>':'Dados insuficientes para comparar canais.';const insights=[];if(topCount)insights.push(topCount[0]+' concentra o maior volume de vendas ('+topCount[1].count+').');if(topRevenue)insights.push(topRevenue[0]+' apresenta o maior faturamento ('+money(topRevenue[1].gross)+').');if(topMargin)insights.push(topMargin[0]+' tem o maior lucro líquido médio por venda ('+money(topMargin[1].profit/topMargin[1].count)+').');if(!durations.length)insights.push('Tempo médio em estoque: dados insuficientes.');insights.push('Conversão por canal: dados insuficientes até que contatos/leads sejam registrados.');$('dashInsights').innerHTML=insights.length?'<ul>'+insights.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'Ainda não há dados suficientes para gerar insights.';$('dashUpdated').textContent='Atualizado em '+new Date().toLocaleString('pt-BR')}
+function renderAll(){const c=calc();$('dRevenue').textContent=money(c.revenue);$('dGross').textContent=money(c.gross);$('dStock').textContent=money(c.stock);$('dUnits').textContent=c.units+' aparelhos disponíveis';$('dCash').textContent=money(c.cash);$('dReinvest').textContent=money(c.cash);$('dCapital').textContent=money(c.capital);$('dSalesIn').textContent=money(c.salesIn);$('dOtherIn').textContent=money(c.otherIn);$('dPurchasesOut').textContent=money(c.purchasesOut);$('dOtherOut').textContent=money(c.otherOut);$('cIn').textContent=money(c.ins);$('cOut').textContent=money(c.outs);$('cBalance').textContent=money(c.cash);$('cPending').textContent=money(c.pending);$('rRevenue').textContent=money(c.revenue);$('rCost').textContent=money(c.cost);$('rGross').textContent=money(c.gross);$('rNet').textContent=money(c.net);$('rCount').textContent=sales.length;$('rTicket').textContent=money(sales.length?c.revenue/sales.length:0);$('rMargin').textContent=(c.revenue?c.gross/c.revenue*100:0).toFixed(1)+'%';$('rExpenses').textContent=money(c.exp);renderDevices();renderSales();renderPurchases();renderCash();renderRecent();renderChart();renderGoals();renderSuppliers();renderStockAlerts();renderDashboardInsights();calcCardFee()}
+function renderDevices(){const q=($('deviceSearch')?.value||'').toLowerCase(),f=$('deviceFilter')?.value||'all';const arr=devices.filter(d=>d.status!=='sold'&&(d.status==='in_stock'||d.status==='reserved')&&([d.model,d.storage,d.color,d.imei,d.serial_number].join(' ').toLowerCase().includes(q))&&(f==='all'||d.status===f));$('deviceRows').innerHTML=arr.map(d=>`<tr><td><b>${d.device_number?('Aparelho '+String(d.device_number).padStart(2,'0')):'—'}</b></td><td>${devicePhotoUrls[d.id]?`<img class="device-thumb" src="${devicePhotoUrls[d.id]}" alt="Foto de ${esc(d.model)}">`:'<span class="device-thumb" style="display:grid;place-items:center">📱</span>'}</td><td><b>${esc(d.model)}</b><br><span class="muted">${esc([d.storage,d.color,d.condition].filter(Boolean).join(' • '))}</span></td><td>${esc(d.imei||'—')}</td><td>${d.battery_health==null?'—':d.battery_health+'%'}</td><td>${money(d.cost_price)}</td><td>${money(d.sale_price)}</td><td><span class="pill ${d.status==='sold'?'gray':d.status==='reserved'?'amber':''}">${d.status==='in_stock'?'Disponível':d.status==='sold'?'Vendido':'Reservado'}</span></td><td class="device-actions"><button class="secondary" onclick="viewDevice('${d.id}')">Visualizar</button>${d.status==='in_stock'?`<button class="secondary" onclick="sellDevice('${d.id}')">Vender</button>`:''}<button class="secondary edit-device-btn" onclick="openDeviceEdit('${d.id}')">✎ Editar</button></td></tr>`).join('')||'<tr><td colspan="9" class="empty">Nenhum aparelho encontrado.</td></tr>'}
+function filteredSales(){const q=($('salesSearch')?.value||'').toLowerCase(),channel=$('salesChannelFilter')?.value||'',payment=$('salesPaymentFilter')?.value||'',status=$('salesStatusFilter')?.value||'',from=$('salesFrom')?.value||'',to=$('salesTo')?.value||'',seller=$('salesSellerFilter')?.value||'';return sales.filter(s=>{const d=devices.find(x=>x.sale_id===s.id);const hay=[d?.model,d?.storage,d?.imei,s.customer,s.channel,s.channel_other,s.seller_name].join(' ').toLowerCase();return (!q||hay.includes(q))&&(!channel||s.channel===channel)&&(!payment||s.payment_method===payment)&&(!status||s.payment_status===status)&&(!from||s.sale_date>=from)&&(!to||s.sale_date<=to)&&(!seller||s.seller_name===seller)})}
+function renderSales(){const sellers=[...new Set(sales.map(x=>x.seller_name).filter(Boolean))];const sf=$('salesSellerFilter');if(sf){const selected=sf.value;sf.innerHTML='<option value="">Todos</option>'+sellers.map(x=>`<option ${x===selected?'selected':''}>${esc(x)}</option>`).join('')}const rows=filteredSales();$('salesRows').innerHTML=rows.map(s=>{const d=devices.find(x=>x.sale_id===s.id);const cost=d?Number(d.cost_price):0;const net=Number(s.net_amount??(Number(s.total_amount||0)-Number(s.discount_amount||0)-Number(s.fee_amount||0)));const profit=net-cost;return `<tr><td>${fmt(s.sale_date)}</td><td>${esc((d?.device_number?'Aparelho '+String(d.device_number).padStart(2,'0')+' • ':'')+[d?.model,d?.storage].filter(Boolean).join(' • ')||'Aparelho')}</td><td>${esc(s.customer||'—')}</td><td>${esc(s.channel==='Outro'?(s.channel_other||'Outro'):(s.channel||'Não informado'))}</td><td>${money(s.total_amount)}</td><td>${money(net)}</td><td>${money(cost)}</td><td class="${profit>=0?'positive':'negative'}">${money(profit)}</td><td><span class="pill ${s.payment_status==='paid'?'':'amber'}">${s.payment_status==='paid'?'Recebido':'Pendente'}</span></td><td class="sale-actions"><button class="secondary" onclick="viewSale('${s.id}')">Visualizar</button>${s.payment_status!=='paid'?`<button class="secondary" onclick="markSalePaid('${s.id}')">Receber</button>`:''}${d?`<button class="secondary edit-device-btn" onclick="openDeviceEdit('${d.id}')">✎ Editar</button>`:''}</td></tr>`}).join('')||'<tr><td colspan="10" class="empty">Nenhuma venda encontrada para os filtros selecionados.</td></tr>';renderChannelReport(rows)}
+function clearSalesFilters(){['salesSearch','salesChannelFilter','salesPaymentFilter','salesStatusFilter','salesFrom','salesTo','salesSellerFilter'].forEach(id=>{const el=$(id);if(el)el.value='' });renderSales()}
+function renderChannelReport(source=filteredSales()){const map={};source.forEach(s=>{const key=s.channel==='Outro'?(s.channel_other||'Outro'):(s.channel||'Não informado');if(!map[key])map[key]={count:0,gross:0,net:0,profit:0};const d=devices.find(x=>x.sale_id===s.id),gross=Number(s.total_amount||0),net=Number(s.net_amount??(gross-Number(s.discount_amount||0)-Number(s.fee_amount||0)));map[key].count++;map[key].gross+=gross;map[key].net+=net;map[key].profit+=net-Number(d?.cost_price||0)});const rows=Object.entries(map).sort((a,b)=>b[1].profit-a[1].profit);$('channelCount').textContent=source.length;$('channelRevenue').textContent=money(source.reduce((a,x)=>a+Number(x.total_amount||0),0));$('channelProfit').textContent=money(rows.reduce((a,x)=>a+x[1].profit,0));$('channelReportRows').innerHTML=rows.map(([k,v])=>`<tr><td>${esc(k)}</td><td>${v.count}</td><td>${money(v.gross)}</td><td>${money(v.net)}</td><td class="${v.profit>=0?'positive':'negative'}">${money(v.profit)}</td></tr>`).join('')||'<tr><td colspan="5" class="empty">Ainda não há vendas para consolidar.</td></tr>'}
+function exportSalesCsv(){const rows=filteredSales();const cols=['data','aparelho','cliente','canal','valor_bruto','desconto','taxa','valor_liquido','custo','lucro_liquido','pagamento','recebimento','vendedor'];const data=[cols.join(';'),...rows.map(s=>{const d=devices.find(x=>x.sale_id===s.id),gross=Number(s.total_amount||0),net=Number(s.net_amount??(gross-Number(s.discount_amount||0)-Number(s.fee_amount||0)));return [s.sale_date,[d?.device_number?'Aparelho '+String(d.device_number).padStart(2,'0'):null,d?.model,d?.storage].filter(Boolean).join(' '),s.customer,s.channel==='Outro'?(s.channel_other||'Outro'):s.channel,gross,s.discount_amount||0,s.fee_amount||0,net,d?.cost_price||0,net-Number(d?.cost_price||0),s.payment_method,s.payment_status,s.seller_name].map(csvCell).join(';')})].join('\r\n');downloadText('kgl-vendas.csv','\ufeff'+data,'text/csv;charset=utf-8')}
+function exportChannelReportCsv(){const rows=filteredSales();const grouped={};rows.forEach(s=>{const k=s.channel==='Outro'?(s.channel_other||'Outro'):(s.channel||'Não informado');const d=devices.find(x=>x.sale_id===s.id),net=Number(s.net_amount??(Number(s.total_amount||0)-Number(s.discount_amount||0)-Number(s.fee_amount||0)));if(!grouped[k])grouped[k]={n:0,g:0,net:0,p:0};grouped[k].n++;grouped[k].g+=Number(s.total_amount||0);grouped[k].net+=net;grouped[k].p+=net-Number(d?.cost_price||0)});const data=['Canal;Quantidade;Faturamento;Liquido;Lucro liquido',...Object.entries(grouped).map(([k,v])=>[k,v.n,v.g,v.net,v.p].map(csvCell).join(';'))].join('\r\n');downloadText('kgl-relatorio-canais.csv','\ufeff'+data,'text/csv;charset=utf-8')}
+function csvCell(v){return '"'+String(v??'').replace(/"/g,'""')+'"'}
+function downloadText(name,content,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url)}
+function viewSale(id){const sale=sales.find(x=>x.id===id);if(!sale)return;const d=devices.find(x=>x.sale_id===id)||{},gross=Number(sale.total_amount||0),discount=Number(sale.discount_amount||0),fee=Number(sale.fee_amount||0),net=Number(sale.net_amount??(gross-discount-fee)),cost=Number(d.cost_price||0),profit=net-cost;const channel=sale.channel==='Outro'?(sale.channel_other||'Outro'):(sale.channel||'Não informado');const details=[['Venda',sale.id.slice(0,8)],['Identificação',[d.device_number?'Aparelho '+String(d.device_number).padStart(2,'0'):null].filter(Boolean).join('')||'—'],['Data',fmt(sale.sale_date)],['Status',sale.payment_status==='paid'?'Recebido':'A receber'],['Aparelho',[d.model,d.storage,d.color].filter(Boolean).join(' • ')||'—'],['IMEI / serial',[d.imei,d.serial_number].filter(Boolean).join(' / ')||'—'],['Bateria',d.battery_health==null?'—':d.battery_health+'%'],['Cliente',sale.customer||'—'],['Vendedor',sale.seller_name||'Integrante da equipe'],['Valor bruto',money(gross)],['Desconto',money(discount)],['Taxa',money(fee)],['Valor líquido',money(net)],['Custo do aparelho',money(cost)],['Lucro líquido',money(profit)],['Forma de pagamento',sale.payment_method||'—'],['Parcelas',(sale.installments||1)+'x'],['Canal de venda',channel],['Observações',sale.notes||'—']];let modal=$('saleViewModal');if(!modal){modal=document.createElement('div');modal.id='saleViewModal';modal.className='modal';document.body.appendChild(modal)}modal.innerHTML=`<div class="dialog sale-view-dialog"><div class="dialoghead"><div><div class="eyebrow">KGL Gestão • DETALHES DA VENDA</div><h2>Venda #${esc(sale.id.slice(0,8))}</h2></div><button class="x" onclick="closeSaleView()">✕</button></div><div class="sale-detail-grid">${details.map(([k,v])=>`<div class="sale-detail-item"><small>${esc(k)}</small><strong>${esc(String(v))}</strong></div>`).join('')}</div><h3>Fotos do aparelho</h3><div id="saleDeviceGallery" class="device-gallery">Carregando fotos...</div><div class="actions"><button class="secondary" onclick="closeSaleView()">Voltar</button>${d.id?`<button onclick="closeSaleView();openDeviceEdit('${d.id}')">Editar venda</button>`:''}</div><p class="notice">Esta tela é somente para consulta. Nenhum dado será alterado enquanto você visualiza.</p></div>`;modal.classList.add('open');if(d.id)loadDeviceGallery(d.id,'saleDeviceGallery')}
+function closeSaleView(){$('saleViewModal')?.classList.remove('open')}
+async function loadDeviceGallery(deviceId,targetId){const box=$(targetId);if(!box)return;box.innerHTML='<span class="notice">Carregando fotos...</span>';const {data,error}=await sb.from('device_photos').select('storage_path,caption,sort_order,para_anuncio').eq('store_id',storeId).eq('device_id',deviceId).order('para_anuncio',{ascending:false}).order('sort_order');if(error){box.innerHTML='<span class="notice">Não foi possível carregar as fotos: '+esc(error.message)+'</span>';return}if(!data?.length){box.innerHTML='<span class="notice">Nenhuma foto cadastrada para este aparelho.</span>';return}const photos=await Promise.all(data.map(async (photo,i)=>{const {data:signed}=await sb.storage.from('kgl-device-photos').createSignedUrl(photo.storage_path,3600);return signed?.signedUrl?{url:signed.signedUrl,caption:photo.para_anuncio?'✨ Anúncio':'🔒 '+(photo.caption||'Foto '+(i+1))}:null}));box.innerHTML=photos.filter(Boolean).map((photo,i)=>`<button class="gallery-photo" type="button" onclick="openPhotoLightbox('${photo.url.replace(/'/g,"%27")}')"><img src="${photo.url}" alt="${esc(photo.caption)}"><small>${esc(photo.caption)}</small></button>`).join('')||'<span class="notice">Não foi possível exibir as fotos.</span>'}
+function openPhotoLightbox(url){let el=$('photoLightbox');if(!el){el=document.createElement('div');el.id='photoLightbox';el.className='photo-lightbox';el.onclick=()=>el.classList.remove('open');document.body.appendChild(el)}el.innerHTML=`<button class="x" onclick="event.stopPropagation();this.parentElement.classList.remove('open')">✕</button><img src="${url}" alt="Foto ampliada">`;el.classList.add('open')}
+function viewDevice(id){const d=devices.find(x=>x.id===id);if(!d)return;let modal=$('deviceViewModal');if(!modal){modal=document.createElement('div');modal.id='deviceViewModal';modal.className='modal';document.body.appendChild(modal)}const fields=[['Identificação',d.device_number?'Aparelho '+String(d.device_number).padStart(2,'0'):'Aguardando numeração'],['Modelo',[d.model,d.storage,d.color].filter(Boolean).join(' • ')],['IMEI',d.imei||'—'],['Número de série',d.serial_number||'—'],['Bateria',d.battery_health==null?'—':d.battery_health+'%'],['Condição',d.condition||'—'],['Nota fiscal',d.has_invoice?'Sim':'Não'],['Fornecedor',purchases.find(x=>x.id===d.purchase_id)?.supplier||'—'],['Data da compra',fmt(purchases.find(x=>x.id===d.purchase_id)?.purchase_date)],['Custo',money(d.cost_price)],['Preço desejado',money(d.sale_price)],['Status',d.status==='in_stock'?'Disponível':d.status==='reserved'?'Reservado':'Vendido'],['Observações',d.notes||'—']];modal.innerHTML=`<div class="dialog sale-view-dialog"><div class="dialoghead"><div><div class="eyebrow">KGL Gestão • FICHA DO APARELHO</div><h2>${esc(d.device_number?'Aparelho '+String(d.device_number).padStart(2,'0'):'Aparelho')} • ${esc(d.model)}</h2></div><button class="x" onclick="closeDeviceView()">✕</button></div><div class="sale-detail-grid">${fields.map(([k,v])=>`<div class="sale-detail-item"><small>${esc(k)}</small><strong>${esc(String(v))}</strong></div>`).join('')}</div><h3>Fotos do aparelho</h3><div id="deviceViewGallery" class="device-gallery">Carregando fotos...</div><div class="actions"><button class="secondary" onclick="closeDeviceView()">Voltar</button>${d.status!=='sold'?`<button class="secondary" onclick="closeDeviceView();sellDevice('${d.id}')">Vender</button>`:''}<button onclick="closeDeviceView();openDeviceEdit('${d.id}')">Editar</button></div><p class="notice">Consulta somente leitura. Para alterar informações, use Editar.</p></div>`;modal.classList.add('open');loadDeviceGallery(id,'deviceViewGallery')}
+function closeDeviceView(){$('deviceViewModal')?.classList.remove('open')}
+
+function renderPurchases(){$('purchaseRows').innerHTML=purchases.map(p=>{const d=devices.find(x=>x.purchase_id===p.id);return `<tr><td>${fmt(p.purchase_date)}</td><td>${esc((d?.device_number?'Aparelho '+String(d.device_number).padStart(2,'0')+' • ':'')+(d?.model||'Aparelho'))}</td><td>${esc(p.supplier||'—')}</td><td>${money(p.total_amount)}</td><td><span class="pill ${p.payment_status==='paid'?'':'amber'}">${p.payment_status==='paid'?'Pago':'Pendente'}</span></td></tr>`}).join('')||'<tr><td colspan="5" class="empty">Nenhuma compra registrada.</td></tr>'}
+function renderCash(){const rows=[...moves].sort((a,b)=>b.movement_date.localeCompare(a.movement_date));$('cashRows').innerHTML=rows.map(m=>`<tr><td>${fmt(m.movement_date)}</td><td>${esc(m.description)}</td><td>${esc(m.category||'—')}</td><td>${money(m.amount)}</td><td><span class="pill ${m.movement_type==='out'?'red':''}">${m.movement_type==='in'?'Entrada':'Saída'}</span></td></tr>`).join('')||'<tr><td colspan="5" class="empty">Nenhuma movimentação no caixa.</td></tr>'}
+function renderRecent(){const rows=[...sales.map(s=>({date:s.sale_date,desc:'Venda registrada',value:s.total_amount,status:s.payment_status})),...purchases.map(p=>({date:p.purchase_date,desc:'Compra de aparelho',value:p.total_amount,status:p.payment_status})),...expenses.map(e=>({date:e.expense_date,desc:e.description,value:e.amount,status:'paid'}))].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,6);$('recentRows').innerHTML=rows.map(r=>`<tr><td>${fmt(r.date)}</td><td>${esc(r.desc)}</td><td>${money(r.value)}</td><td><span class="pill ${r.status==='paid'?'':'amber'}">${r.status==='paid'?'Registrado':'Pendente'}</span></td></tr>`).join('')||'<tr><td colspan="4" class="empty">Comece registrando sua primeira compra.</td></tr>'}
+function renderChart(){let now=new Date(),a=[];for(let i=5;i>=0;i--){let d=new Date(now.getFullYear(),now.getMonth()-i,1),k=d.toISOString().slice(0,7),ss=sales.filter(s=>s.sale_date.startsWith(k)),rev=ss.reduce((x,s)=>x+Number(s.total_amount),0);let ids=ss.map(s=>s.id),cost=devices.filter(x=>ids.includes(x.sale_id)).reduce((x,d)=>x+Number(d.cost_price),0);a.push({l:d.toLocaleDateString('pt-BR',{month:'short'}),r:rev,p:rev-cost})}let max=Math.max(1,...a.map(x=>x.r));$('chart').innerHTML=a.map(x=>`<div class="barcol"><div style="height:100%;display:flex;align-items:end;gap:3px"><div class="bar rev" style="height:${x.r/max*100}%" title="${money(x.r)}"></div><div class="bar" style="height:${Math.max(0,x.p)/max*100}%" title="${money(x.p)}"></div></div><span>${x.l}</span></div>`).join('')}
+function field(n,l,t='text',req=true,extra=''){return `<div class="field"><label>${l}</label><input name="${n}" type="${t}" ${req?'required':''} ${extra}></div>`}
+const CHECK_ITEMS=['Face ID / Touch ID','Câmeras','Tela e touch','Som e microfones','Botões','Wi-Fi e Bluetooth','Carregamento','Sinal / chip','Sem bloqueio iCloud','IMEI regular (Anatel)'];
+function siteFields(d={}){const pub=d.site_publicar!==false;const ck=Array.isArray(d.site_checklist)?d.site_checklist:[];const cons=['Excelente','Muito bom','Bom','Com marcas de uso'];return `<div class="field full site-box"><label>🌐 Site KGL Store</label><small class="site-hint">Estes campos aparecem no anúncio do site. Custo, IMEI e fornecedor nunca aparecem.</small></div><div class="field"><label>Mostrar no site?</label><select name="site_publicar"><option value="true" ${pub?'selected':''}>Sim, publicar enquanto estiver disponível</option><option value="false" ${pub?'':'selected'}>Não publicar</option></select></div><div class="field"><label>Conservação (site)</label><select name="site_conservacao"><option value="">— não informar —</option>${cons.map(c=>`<option ${d.site_conservacao===c?'selected':''}>${c}</option>`).join('')}</select></div><div class="field full"><label>Acompanha (separe por vírgula)</label><input name="site_acessorios" placeholder="Ex.: Caixa original, Cabo original, Nota fiscal" value="${esc(d.site_acessorios||'')}"></div><div class="field full"><label>Descrição do anúncio</label><textarea name="site_descricao" rows="3" placeholder="Ex.: Sem arranhões na tela e na traseira. Face ID e câmeras 100%.">${esc(d.site_descricao||'')}</textarea></div><div class="field"><label>Destaque na página inicial</label><select name="site_destaque"><option value="">Sem destaque</option>${['Oferta','Novidade'].map(x=>`<option ${d.site_destaque===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field full"><label>Laudo KGL: o que foi testado e está OK <small class="site-hint">(aparece no anúncio)</small></label><div class="checkgrid">${CHECK_ITEMS.map(x=>`<label class="checkitem"><input type="checkbox" name="site_check" value="${esc(x)}" ${ck.includes(x)?'checked':''}> ${esc(x)}</label>`).join('')}</div></div>`}
+function siteData(d){return {site_destaque:d.site_destaque||null,site_checklist:[...document.querySelectorAll('#formFields [name=site_check]:checked')].map(x=>x.value),site_publicar:d.site_publicar!=='false',site_conservacao:d.site_conservacao||null,site_acessorios:(d.site_acessorios||'').trim()||null,site_descricao:(d.site_descricao||'').trim()||null}}
+function select(n,l,opts){return `<div class="field"><label>${l}</label><select name="${n}" required>${opts}</select></div>`}
+const MODEL_OPTIONS=['iPhone 11','iPhone 11 Pro','iPhone 11 Pro Max','iPhone 12 mini','iPhone 12','iPhone 12 Pro','iPhone 12 Pro Max','iPhone 13 mini','iPhone 13','iPhone 13 Pro','iPhone 13 Pro Max','iPhone 14','iPhone 14 Plus','iPhone 14 Pro','iPhone 14 Pro Max','iPhone 15','iPhone 15 Plus','iPhone 15 Pro','iPhone 15 Pro Max','iPhone 16e','iPhone 16','iPhone 16 Plus','iPhone 16 Pro','iPhone 16 Pro Max','iPhone 17','iPhone 17 Air','iPhone 17 Pro','iPhone 17 Pro Max','iPhone SE (2022)','Outro'];
+const STORAGE_OPTIONS=['64 GB','128 GB','256 GB','512 GB','1 TB','2 TB','Outro'];
+const COLOR_OPTIONS=['Não informado','Preto','Branco','Estelar','Azul','Azul-claro','Azul-escuro','Rosa','Verde','Verde-menta','Amarelo','Roxo','Roxo-profundo','Vermelho','Titânio natural','Titânio azul','Titânio branco','Titânio preto','Titânio deserto','Titânio preto-espacial','Prateado','Dourado','Outro'];
+function presetSelect(n,l,options,value=''){const vals=options.map(x=>`<option value="${esc(x)}" ${x===value?'selected':''}>${esc(x)}</option>`).join('');return `<div class="field"><label>${l}</label><select name="${n}" required><option value="">Selecione...</option>${vals}</select></div>`}
+function supplierField(value=''){const opts=(suppliers||[]).map(s=>`<option value="${esc(s.name)}"></option>`).join('');return `<div class="field"><label>Fornecedor / vendedor</label><input name="supplier" list="kglSupplierOptions" value="${esc(value||'')}" placeholder="Selecione ou digite"><datalist id="kglSupplierOptions">${opts}</datalist></div>`}
+function invoiceSelect(value){return `<div class="field"><label>Nota fiscal?</label><select name="has_invoice" required><option value="true" ${value===true?'selected':''}>Sim</option><option value="false" ${value===false?'selected':''}>Não</option></select></div>`}
+function invoiceUploadField(){return `<div class="field full invoice-upload-field" id="invoiceUploadWrap"><label>Arquivo da nota fiscal</label><input id="invoiceFile" name="invoice_file" type="file"><small>Aceita PDF, imagens, XML e outros formatos. Até 20 MB.</small><div id="invoiceFileStatus" class="notice">Nenhum arquivo selecionado.</div></div>`}
+
+function resolvedPreset(value,custom){return (custom||'').trim() || (value==='Outro'?'':value)}
+
+function openForm(type,deviceId=null){let title='',html='';if(type==='purchase'){title='Registrar compra de iPhone';html=`<div class="formgrid">${presetSelect('model','Modelo do iPhone',MODEL_OPTIONS)}${field('model_custom','Outro modelo (preencha somente se selecionou Outro)','text',false,'placeholder="Ex.: iPhone 18 Pro"')}${presetSelect('storage','Armazenamento',STORAGE_OPTIONS)}${field('storage_custom','Outro armazenamento (opcional)','text',false,'placeholder="Ex.: 2 TB"')}${presetSelect('color','Cor',COLOR_OPTIONS)}${field('color_custom','Outra cor (opcional)','text',false,'placeholder="Digite a cor"')}${field('imei','IMEI','text',false,'inputmode="numeric" maxlength="20" placeholder="Digite ou cole o IMEI"')}${field('serial_number','Número de série','text',false,'placeholder="Digite ou cole o número de série"')}${field('battery_health','Saúde da bateria (%)','number',false,'min="0" max="100" step="1" placeholder="Ex.: 87"')}${select('condition','Condição','<option value="Usado">Usado</option><option value="Novo">Novo</option><option value="Recondicionado">Recondicionado</option>')}${siteFields()}${invoiceSelect(false)}${invoiceUploadField()}${field('cost_price','Custo do aparelho (R$)','number',true,'min="0.01" step="0.01" placeholder="0,00"')}${field('sale_price','Preço desejado de venda (R$)','number',false,'min="0" step="0.01" placeholder="0,00"')}${supplierField()}${field('purchase_date','Data da compra','date',true,`value="${dateNow()}"`)}${select('payment_status','Pagamento','<option value="paid">Pago</option><option value="pending">Pendente</option>')}<div class="field full photo-upload-field"><label>🔒 Fotos do estado do aparelho <span class="tag-admin">só administração</span></label><select name="photo_category"><option value="Frente / tela">Frente / tela</option><option value="Traseira">Traseira</option><option value="Laterais">Laterais</option><option value="Marcas / danos">Marcas / danos</option><option value="Acessórios">Acessórios</option><option value="Detalhes">Detalhes</option></select><input id="purchasePhotos" name="photos" type="file" accept="image/*" multiple><small>Adicione até 8 fotos. Você também poderá incluí-las depois pela opção Editar.</small><div id="photoPreview" class="photo-preview"></div></div><div class="field full photo-upload-field ad-photo-field"><label>✨ Fotos do anúncio <span class="tag-site">vão para o site</span></label><input id="purchaseAdPhotos" name="ad_photos" type="file" accept="image/*" multiple><small>As fotos bonitas que o cliente vai ver na loja. A primeira vira a foto principal. Até 8 por envio, 8 MB cada.</small><div id="adPhotoPreview" class="photo-preview"></div></div></div>`}
+if(type==='editDevice'){const d=devices.find(x=>x.id===deviceId);if(!d){toast('Aparelho não encontrado.');return}title='Editar aparelho';html=`<div class="notice" style="margin-bottom:15px">Corrija os dados do aparelho. ${d.status==='sold'?'Como este aparelho já foi vendido, os dados da venda também podem ser corrigidos aqui.':'As alterações serão sincronizadas com o estoque e com o registro da compra.'}</div><div class="formgrid">${presetSelect('model','Modelo do iPhone',[...MODEL_OPTIONS],MODEL_OPTIONS.includes(d.model)?d.model:'Outro')}${field('model_custom','Outro modelo (preencha somente se selecionou Outro)','text',false,`placeholder="Ex.: ${esc(d.model||'iPhone 18 Pro')}" value="${MODEL_OPTIONS.includes(d.model)?'':esc(d.model||'')}"`)}${presetSelect('storage','Armazenamento',STORAGE_OPTIONS,STORAGE_OPTIONS.includes(d.storage)?d.storage:'Outro')}${field('storage_custom','Outro armazenamento (opcional)','text',false,`value="${STORAGE_OPTIONS.includes(d.storage)?'':esc(d.storage||'')}" placeholder="Ex.: 2 TB"`)}${presetSelect('color','Cor',COLOR_OPTIONS,COLOR_OPTIONS.includes(d.color)?d.color:'Outro')}${field('color_custom','Outra cor (opcional)','text',false,`value="${COLOR_OPTIONS.includes(d.color)?'':esc(d.color||'')}" placeholder="Digite a cor"`)}${field('imei','IMEI','text',false,`inputmode="numeric" maxlength="20" value="${esc(d.imei||'')}"`)}${field('serial_number','Número de série','text',false,`value="${esc(d.serial_number||'')}"`)}${field('battery_health','Saúde da bateria (%)','number',false,`min="0" max="100" value="${d.battery_health??''}"`)}${select('condition','Condição',`<option value="Usado" ${d.condition==='Usado'?'selected':''}>Usado</option><option value="Novo" ${d.condition==='Novo'?'selected':''}>Novo</option><option value="Recondicionado" ${d.condition==='Recondicionado'?'selected':''}>Recondicionado</option>`)}${siteFields(d)}${invoiceSelect(d.has_invoice===true)}${invoiceUploadField()}${field('cost_price','Custo do aparelho (R$)','number',true,`min="0.01" step="0.01" value="${Number(d.cost_price||0)}"`)}${field('sale_price','Preço desejado de venda (R$)','number',false,`min="0" step="0.01" value="${Number(d.sale_price||0)}"`)}${supplierField(purchases.find(x=>x.id===d.purchase_id)?.supplier||'')}${field('purchase_date','Data da compra','date',false,`value="${esc(purchases.find(x=>x.id===d.purchase_id)?.purchase_date||'')}"`)}${select('payment_status','Pagamento da compra',`<option value="paid" ${purchases.find(x=>x.id===d.purchase_id)?.payment_status==='paid'?'selected':''}>Pago</option><option value="pending" ${purchases.find(x=>x.id===d.purchase_id)?.payment_status==='pending'?'selected':''}>Pendente</option>`)}${d.status==='sold'&&d.sale_id?(()=>{const sale=sales.find(x=>x.id===d.sale_id)||{};return `<div class="field full"><label style="color:#d5b477">Dados da venda</label></div>${field('sale_customer','Cliente','text',false,`value="${esc(sale.customer||'')}"`)}${field('sale_date','Data da venda','date',true,`value="${esc(sale.sale_date||dateNow())}"`)}${field('sale_total_amount','Valor efetivamente vendido (R$)','number',true,`min="0.01" step="0.01" value="${Number(sale.total_amount||0)}"`)}${select('sale_payment_method','Forma de pagamento', ['Pix','Dinheiro','Cartão de débito','Cartão de crédito','Transferência','Outro'].map(x=>`<option ${sale.payment_method===x?'selected':''}>${x}</option>`).join(''))}${select('sale_payment_status','Recebimento',`<option value="paid" ${sale.payment_status==='paid'?'selected':''}>Já recebido</option><option value="pending" ${sale.payment_status==='pending'?'selected':''}>A receber</option>`)}${field('sale_discount_amount','Desconto (R$)','number',false,`min="0" step="0.01" value="${Number(sale.discount_amount||0)}"`)}${field('sale_fee_amount','Taxa (R$)','number',false,`min="0" step="0.01" value="${Number(sale.fee_amount||0)}"`)}${select('sale_installments','Parcelas',Array.from({length:12},(_,i)=>`<option value="${i+1}" ${Number(sale.installments||1)===i+1?'selected':''}>${i+1}x</option>`).join(''))}${select('sale_channel','Canal de venda', `<option value="">Selecione o canal</option>${['OLX','Site','WhatsApp','Instagram','Facebook Marketplace','Indicação','Outro'].map(x=>`<option ${sale.channel===x?'selected':''}>${x}</option>`).join('')}`)}${field('sale_channel_other','Outro canal','text',false,`value="${esc(sale.channel_other||'')}"`)}${field('sale_notes','Observações','text',false,`value="${esc(sale.notes||'')}"`)}`})():''}<div class="field full photo-upload-field"><label>Fotos já cadastradas</label><div id="existingPhotoPreview" class="existing-photos"><span class="notice">Carregando fotos...</span></div><label>🔒 Novas fotos do estado <span class="tag-admin">só administração</span> · categoria</label><select name="photo_category"><option value="Frente / tela">Frente / tela</option><option value="Traseira">Traseira</option><option value="Laterais">Laterais</option><option value="Marcas / danos">Marcas / danos</option><option value="Acessórios">Acessórios</option><option value="Detalhes">Detalhes</option></select><label for="editPhotos">Adicionar novas fotos</label><input id="editPhotos" name="photos" type="file" accept="image/*" multiple><small>As novas fotos serão acrescentadas às atuais. Até 8 imagens por envio, 8 MB cada.</small><div id="editPhotoPreview" class="photo-preview"></div></div><div class="field full photo-upload-field ad-photo-field"><label>✨ Fotos do anúncio <span class="tag-site">vão para o site</span></label><input id="editAdPhotos" name="ad_photos" type="file" accept="image/*" multiple><small>As fotos bonitas que o cliente vai ver na loja. A primeira vira a foto principal. Até 8 por envio, 8 MB cada.</small><div id="editAdPhotoPreview" class="photo-preview"></div></div></div>`;$('dataForm').dataset.deviceId=deviceId;setTimeout(()=>{loadExistingDevicePhotos(deviceId);loadExistingDeviceInvoice(deviceId);toggleInvoiceUpload();toggleOtherChannel($('dataForm'))},0)}
+if(type==='sale'){let available=devices.filter(d=>d.status==='in_stock');let opts=available.map(d=>`<option value="${d.id}">${esc(d.model)} • ${esc(d.storage||'')} • IMEI ${esc(d.imei||'não informado')} • custo ${money(d.cost_price)}</option>`).join('');title='Registrar venda';html=`<div class="formgrid">${`<div class="field full"><label>Aparelho disponível</label><select name="device_id" required>${opts||'<option value="">Nenhum aparelho disponível</option>'}</select></div>`}${field('customer','Nome do cliente','text',false)}${field('sale_date','Data da venda','date',true,`value="${dateNow()}"`)}${field('total_amount','Valor bruto cobrado do cliente (R$)','number',true,'min="0.01" step="0.01"')}${field('discount_amount','Desconto concedido (R$)','number',false,'min="0" step="0.01" value="0"')}${field('fee_amount','Taxa da maquininha (R$)','number',false,'min="0" step="0.01" value="0"')}${select('payment_method','Forma de pagamento','<option>Pix</option><option>Dinheiro</option><option>Cartão de débito</option><option>Cartão de crédito</option><option>Transferência</option><option>Outro</option>')}${select('installments','Parcelas',Array.from({length:12},(_,i)=>`<option value="${i+1}" ${i===0?'selected':''}>${i+1}x</option>`).join(''))}${select('channel','Canal de venda','<option value="">Selecione o canal</option><option>OLX</option><option>Site</option><option>WhatsApp</option><option>Instagram</option><option>Facebook Marketplace</option><option>Indicação</option><option>Outro</option>')}${field('channel_other','Informe o outro canal','text',false,'placeholder="Ex.: Feira, grupo local..."')}${field('notes','Observações da venda','text',false,'placeholder="Detalhes relevantes da negociação"')}${select('payment_status','Recebimento','<option value="paid">Já recebido</option><option value="pending">A receber</option>')}</div>`}
+if(type==='expense'||type==='income'){title=type==='expense'?'Registrar despesa':'Registrar entrada no caixa';html=`<div class="formgrid">${field('description','Descrição')}${field('amount','Valor (R$)','number',true,'min="0.01" step="0.01"')}${field(type==='expense'?'expense_date':'movement_date','Data','date',true,`value="${dateNow()}"`)}${select('category','Categoria',type==='expense'?'<option>Frete</option><option>Taxas</option><option>Embalagem</option><option>Marketing</option><option>Impostos</option><option>Outros</option>':'<option>Capital inicial</option><option>Aporte de capital</option><option>Outros recebimentos</option>')}</div>`}
+$('modalTitle').textContent=title;$('formFields').innerHTML=html;toggleInvoiceUpload();toggleOtherChannel($('dataForm'));$('dataForm').dataset.type=type;if(type!=='editDevice')delete $('dataForm').dataset.deviceId;$('modal').classList.add('open')}
+async function uploadAdPhotos(deviceId,files){files=files||[];if(!files.length)return;if(files.length>8)throw new Error('Selecione no máximo 8 fotos do anúncio por envio.');for(const file of files){if(!file.type.startsWith('image/'))throw new Error('Envie somente arquivos de imagem.');if(file.size>8*1024*1024)throw new Error('A imagem '+file.name+' ultrapassa 8 MB.')}
+ const {data:ult}=await sb.from('device_photos').select('sort_order').eq('store_id',storeId).eq('device_id',deviceId).eq('para_anuncio',true).order('sort_order',{ascending:false}).limit(1);let base=(ult&&ult[0]?Number(ult[0].sort_order)||0:-1)+1;
+ for(let i=0;i<files.length;i++){const file=files[i];const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';const path=storeId+'/'+deviceId+'/anuncio_'+Date.now()+'_'+i+'.'+ext;
+  const {error:up}=await sb.storage.from('kgl-device-photos').upload(path,file,{contentType:file.type,upsert:false});if(up)throw new Error('Dados salvos, mas houve falha ao enviar a foto do anúncio: '+up.message);
+  const {error:meta}=await sb.from('device_photos').insert({store_id:storeId,device_id:deviceId,storage_path:path,caption:'Anúncio',sort_order:base+i,para_anuncio:true,created_by:user.id});if(meta){await sb.storage.from('kgl-device-photos').remove([path]);throw new Error('Não foi possível registrar a foto do anúncio: '+meta.message)}}}
+async function setPhotoKind(path,anuncio,deviceId){const {error}=await sb.from('device_photos').update({para_anuncio:anuncio}).eq('store_id',storeId).eq('storage_path',path);if(error){toast('Não foi possível mover a foto: '+error.message);return}toast(anuncio?'Foto agora aparece no anúncio do site.':'Foto agora é só da administração.');loadExistingDevicePhotos(deviceId)}
+function photoBadge(p){return p.para_anuncio?'<span class="tag-site">Anúncio</span>':'<span class="tag-admin">'+esc(p.caption||'Estado')+'</span>'}
+async function loadExistingDevicePhotos(deviceId){const box=$('existingPhotoPreview');if(!box)return;const {data,error}=await sb.from('device_photos').select('storage_path,caption,sort_order,para_anuncio').eq('store_id',storeId).eq('device_id',deviceId).order('para_anuncio',{ascending:false}).order('sort_order');if(error){box.innerHTML='<span class="notice">Não foi possível carregar as fotos: '+esc(error.message)+'</span>';return}if(!data?.length){box.innerHTML='<span class="notice">Nenhuma foto cadastrada ainda.</span>';return}const urls=await Promise.all(data.map(async p=>{const {data:signed}=await sb.storage.from('kgl-device-photos').createSignedUrl(p.storage_path,3600);return signed?.signedUrl?{...p,url:signed.signedUrl}:null}));box.innerHTML=urls.filter(Boolean).map(p=>'<div class="photo-kind"><img src="'+p.url+'" alt="">'+photoBadge(p)+'<button type="button" class="photo-move" onclick="setPhotoKind(\''+p.storage_path.replace(/'/g,"\\'")+'\','+(!p.para_anuncio)+',\''+deviceId+'\')">'+(p.para_anuncio?'Tirar do anúncio':'Usar no anúncio')+'</button></div>').join('')||'<span class="notice">As fotos existem, mas não foi possível gerar os links de visualização.</span>'}
+function openInitialCapitalForm(){openForm('income');const desc=$('formFields').querySelector('[name=description]');const category=$('formFields').querySelector('[name=category]');if(desc&&!desc.value)desc.value='Capital inicial da KGL Gestão';if(category)category.value='Capital inicial'}
+function closeForm(){$('modal').classList.remove('open')}
+document.addEventListener('change',e=>{if(e.target?.name==='has_invoice')toggleInvoiceUpload();if(['channel','sale_channel'].includes(e.target?.name))toggleOtherChannel(e.target.form);if(e.target?.id==='invoiceFile'){const box=$('invoiceFileStatus');if(box)box.textContent=e.target.files?.[0]?'Arquivo selecionado: '+e.target.files[0].name+' • '+formatFileSize(e.target.files[0].size):'Nenhum arquivo selecionado.'}if(['purchasePhotos','editPhotos','purchaseAdPhotos','editAdPhotos'].includes(e.target?.id)){const target={purchasePhotos:'photoPreview',editPhotos:'editPhotoPreview',purchaseAdPhotos:'adPhotoPreview',editAdPhotos:'editAdPhotoPreview'}[e.target.id];const files=[...e.target.files].slice(0,8);$(target).innerHTML='';for(const file of files){if(!file.type.startsWith('image/'))continue;const img=document.createElement('img');img.alt=file.name;img.src=URL.createObjectURL(file);$(target).appendChild(img)}}});
+$('dataForm').addEventListener('submit',async e=>{e.preventDefault();let d=Object.fromEntries(new FormData(e.target));d.model=resolvedPreset(d.model,d.model_custom);d.storage=resolvedPreset(d.storage,d.storage_custom);d.color=resolvedPreset(d.color,d.color_custom);if(e.target.dataset.type==='sale'&&(!d.channel||(d.channel==='Outro'&&!d.channel_other?.trim())))throw new Error('Informe o canal de venda.');if(['purchase','editDevice'].includes(e.target.dataset.type)&&(!d.model||!d.storage))throw new Error('Selecione o modelo e o armazenamento. Se escolher Outro, preencha o campo correspondente.');if(d.color==='Não informado')d.color='';d.has_invoice=d.has_invoice==='true';d.invoiceFile=e.target.querySelector('[name=invoice_file]')?.files?.[0]||null;d.photos=[...(e.target.querySelector('[name=photos]')?.files||[])].slice(0,8);d.adPhotos=[...(e.target.querySelector('[name=ad_photos]')?.files||[])].slice(0,8);$('saveBtn').disabled=true;$('saveBtn').textContent='Salvando...';try{if(e.target.dataset.type==='purchase')await createPurchase(d);if(e.target.dataset.type==='editDevice')await updateDevice(e.target.dataset.deviceId,d);if(e.target.dataset.type==='sale')await createSale(d);if(e.target.dataset.type==='expense')await createExpense(d);if(e.target.dataset.type==='income')await createIncome(d);closeForm();e.target.reset();await loadAll();toast('Registro salvo e sincronizado!')}catch(err){console.error(err);toast('Erro ao salvar: '+err.message)}finally{$('saveBtn').disabled=false;$('saveBtn').textContent='Salvar'}});
+
+async function loadExistingDeviceInvoice(deviceId){
+ const box=$('invoiceFileStatus');if(!box)return;
+ const {data,error}=await sb.from('device_invoices').select('storage_path,original_name,mime_type,size_bytes').eq('store_id',storeId).eq('device_id',deviceId).maybeSingle();
+ if(error){box.textContent='Não foi possível consultar a nota fiscal: '+error.message;return}
+ if(!data){box.textContent='Nenhum arquivo de nota fiscal anexado.';return}
+ const {data:signed,error:se}=await sb.storage.from('kgl-device-invoices').createSignedUrl(data.storage_path,3600);
+ box.innerHTML=se?'Nota fiscal anexada: '+esc(data.original_name):`Nota fiscal atual: <a href="${signed.signedUrl}" target="_blank" rel="noopener">${esc(data.original_name)}</a> • ${formatFileSize(data.size_bytes)}. Selecione outro arquivo para substituir.`;
+}
+function formatFileSize(bytes){if(!bytes)return 'tamanho não informado';const units=['B','KB','MB','GB'];let n=bytes,i=0;while(n>=1024&&i<units.length-1){n/=1024;i++}return n.toFixed(i?1:0)+' '+units[i]}
+function toggleOtherChannel(form){const el=form?.querySelector('[name="channel_other"]')||form?.querySelector('[name="sale_channel_other"]');if(el){const show=(form.querySelector('[name="channel"]')||form.querySelector('[name="sale_channel"]'))?.value==='Outro';el.closest('.field')?.classList.toggle('hidden',!show);el.required=show}}
+function toggleInvoiceUpload(){
+ const yes=$('formFields')?.querySelector('[name="has_invoice"]')?.value==='true';
+ const wrap=$('invoiceUploadWrap');if(wrap)wrap.classList.toggle('hidden',!yes);
+}
+async function saveInvoiceAttachment(deviceId,file){
+ if(!file)return;
+ if(file.size>20*1024*1024)throw new Error('A nota fiscal ultrapassa o limite de 20 MB.');
+ const safeName=(file.name||'nota-fiscal').replace(/[^\w.\-() ]/g,'_').slice(-120);
+ const path=storeId+'/'+deviceId+'/'+Date.now()+'_'+safeName;
+ const {error:up}=await sb.storage.from('kgl-device-invoices').upload(path,file,{contentType:file.type||'application/octet-stream',upsert:false});
+ if(up)throw new Error('Não foi possível enviar a nota fiscal: '+up.message+'. Verifique se a migração do armazenamento foi executada.');
+ const {data:old}=await sb.from('device_invoices').select('storage_path').eq('store_id',storeId).eq('device_id',deviceId).maybeSingle();
+ const {error:meta}=await sb.from('device_invoices').upsert({store_id:storeId,device_id:deviceId,storage_path:path,original_name:safeName,mime_type:file.type||'application/octet-stream',size_bytes:file.size,created_by:user.id,updated_at:new Date().toISOString()},{onConflict:'device_id'});
+ if(meta){await sb.storage.from('kgl-device-invoices').remove([path]);throw new Error('Arquivo enviado, mas não foi possível registrar os dados da nota: '+meta.message)}
+ if(old?.storage_path&&old.storage_path!==path)await sb.storage.from('kgl-device-invoices').remove([old.storage_path]);
+}
+async function updateDevice(deviceId,d){
+ const device=devices.find(x=>x.id===deviceId);if(!device)throw new Error('Aparelho não encontrado.');
+ const files=d.photos||[];if(files.length>8)throw new Error('Selecione no máximo 8 fotos por envio.');
+ for(const file of files){if(!file.type.startsWith('image/'))throw new Error('Envie somente arquivos de imagem.');if(file.size>8*1024*1024)throw new Error('A imagem '+file.name+' ultrapassa 8 MB.')}
+ const cost=Number(d.cost_price);if(!Number.isFinite(cost)||cost<=0)throw new Error('Informe um custo válido.');
+ if(d.battery_health!==''&&(Number(d.battery_health)<0||Number(d.battery_health)>100))throw new Error('A saúde da bateria deve ficar entre 0 e 100%.');
+ const patch={model:d.model.trim(),storage:d.storage||null,color:d.color||null,imei:d.imei||null,serial_number:d.serial_number||null,battery_health:d.battery_health===''?null:Number(d.battery_health),condition:d.condition,has_invoice:d.has_invoice===true,cost_price:cost,sale_price:Number(d.sale_price)||0,...siteData(d)};
+ const {error:de}=await sb.from('devices').update(patch).eq('id',deviceId).eq('store_id',storeId);if(de)throw de;
+ await uploadAdPhotos(deviceId,d.adPhotos);
+ if(d.has_invoice===true){if(d.invoiceFile)await saveInvoiceAttachment(deviceId,d.invoiceFile);else {const {data:existingInvoice,error:invoiceErr}=await sb.from('device_invoices').select('id').eq('store_id',storeId).eq('device_id',deviceId).maybeSingle();if(invoiceErr)throw invoiceErr;if(!existingInvoice)throw new Error('Você marcou que possui nota fiscal. Anexe o arquivo antes de salvar.')}}else{const {data:oldInvoice}=await sb.from('device_invoices').select('storage_path').eq('store_id',storeId).eq('device_id',deviceId).maybeSingle();if(oldInvoice){const {error:delMeta}=await sb.from('device_invoices').delete().eq('store_id',storeId).eq('device_id',deviceId);if(delMeta)throw delMeta;await sb.storage.from('kgl-device-invoices').remove([oldInvoice.storage_path])}}
+ if(device.purchase_id){
+  const purchase=purchases.find(x=>x.id===device.purchase_id);
+  const purchasePatch={total_amount:cost,supplier:d.supplier||null,purchase_date:d.purchase_date||purchase?.purchase_date,payment_status:d.payment_status||purchase?.payment_status};
+  const {error:pe}=await sb.from('purchases').update(purchasePatch).eq('id',device.purchase_id).eq('store_id',storeId);if(pe)throw pe;
+  const {data:movement,error:me}=await sb.from('cash_movements').select('id').eq('purchase_id',device.purchase_id).eq('store_id',storeId).maybeSingle();if(me)throw me;
+  if(purchasePatch.payment_status==='paid'){
+   if(movement){const {error}=await sb.from('cash_movements').update({description:'Compra: '+patch.model,amount:cost,movement_date:purchasePatch.purchase_date}).eq('id',movement.id);if(error)throw error}
+   else {const {error}=await sb.from('cash_movements').insert({store_id:storeId,description:'Compra: '+patch.model,movement_type:'out',category:'Compra de mercadoria',amount:cost,movement_date:purchasePatch.purchase_date,purchase_id:device.purchase_id,created_by:user.id});if(error)throw error}
+  }else if(movement){const {error}=await sb.from('cash_movements').delete().eq('id',movement.id);if(error)throw error}
+ }
+ if(device.status==='sold'&&device.sale_id){
+  const saleGross=Number(d.sale_total_amount),saleDiscount=Number(d.sale_discount_amount)||0,saleFee=Number(d.sale_fee_amount)||0,saleNet=saleGross-saleDiscount-saleFee;if(saleNet<0)throw new Error('Desconto e taxa não podem superar o valor bruto.');if(!d.sale_channel)throw new Error('Selecione o canal de venda.');if(d.sale_channel==='Outro'&&!d.sale_channel_other?.trim())throw new Error('Informe qual foi o outro canal.');const salePatch={customer:d.sale_customer||null,sale_date:d.sale_date,total_amount:saleGross,payment_method:d.sale_payment_method,payment_status:d.sale_payment_status,discount_amount:saleDiscount,fee_amount:saleFee,net_amount:saleNet,installments:Number(d.sale_installments)||1,channel:d.sale_channel,channel_other:d.sale_channel==='Outro'?d.sale_channel_other.trim():null,notes:d.sale_notes||null};
+  if(!Number.isFinite(salePatch.total_amount)||salePatch.total_amount<=0)throw new Error('Informe um valor de venda válido.');
+  const {error:se}=await sb.from('sales').update(salePatch).eq('id',device.sale_id).eq('store_id',storeId);if(se)throw se;
+  const {error:syncError}=await sb.rpc('kgl_set_sale_payment_status',{p_store_id:storeId,p_sale_id:device.sale_id,p_payment_status:salePatch.payment_status,p_movement_date:salePatch.sale_date});if(syncError)throw syncError;
+  const {error:priceError}=await sb.from('devices').update({sale_price:salePatch.total_amount}).eq('id',deviceId).eq('store_id',storeId);if(priceError)throw priceError;
+ }
+ for(let i=0;i<files.length;i++){
+  const file=d.photos[i],ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg',path=storeId+'/'+deviceId+'/'+Date.now()+'_'+i+'.'+ext;
+  const {error:up}=await sb.storage.from('kgl-device-photos').upload(path,file,{contentType:file.type,upsert:false});if(up)throw new Error('Dados atualizados, mas houve falha ao enviar a foto: '+up.message);
+  const {error:meta}=await sb.from('device_photos').insert({store_id:storeId,device_id:deviceId,storage_path:path,caption:d.photo_category||'Detalhes',sort_order:i,para_anuncio:false,created_by:user.id});if(meta){await sb.storage.from('kgl-device-photos').remove([path]);throw new Error('Não foi possível registrar a foto: '+meta.message)}
+ }
+}
+async function openDeviceEdit(deviceId){openForm('editDevice',deviceId)}
+async function createPurchase(d){if((d.photos||[]).length>8)throw new Error('Selecione no máximo 8 fotos.');for(const file of (d.photos||[])){if(!file.type.startsWith('image/'))throw new Error('Envie somente arquivos de imagem.');if(file.size>8*1024*1024)throw new Error('A imagem '+file.name+' ultrapassa 8 MB.');}if(d.has_invoice===true&&!d.invoiceFile)throw new Error('Você informou que possui nota fiscal. Anexe o arquivo antes de salvar.');if(d.invoiceFile&&d.invoiceFile.size>20*1024*1024)throw new Error('A nota fiscal ultrapassa o limite de 20 MB.');const cost=Number(d.cost_price);const {data:p,error:pe}=await sb.from('purchases').insert({store_id:storeId,supplier:d.supplier||null,purchase_date:d.purchase_date,total_amount:cost,payment_status:d.payment_status,created_by:user.id}).select().single();if(pe)throw pe;const dev={store_id:storeId,purchase_id:p.id,brand:'Apple',model:d.model,storage:d.storage||null,color:d.color||null,imei:d.imei||null,serial_number:d.serial_number||null,battery_health:d.battery_health===''?null:Number(d.battery_health),condition:d.condition,has_invoice:d.has_invoice===true,cost_price:cost,sale_price:Number(d.sale_price)||0,status:'in_stock',...siteData(d)};const {data:created,error:de}=await sb.from('devices').insert(dev).select().single();if(de){await sb.from('purchases').delete().eq('id',p.id);throw de}if(d.photos?.length){for(let i=0;i<d.photos.length;i++){const file=d.photos[i];if(!file.type.startsWith('image/'))continue;if(file.size>8*1024*1024)throw new Error('A imagem '+file.name+' ultrapassa 8 MB.');const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'');const path=storeId+'/'+created.id+'/'+Date.now()+'_'+i+'.'+ext;const {error:up}=await sb.storage.from('kgl-device-photos').upload(path,file,{contentType:file.type,upsert:false});if(up)throw new Error('Compra salva, mas não foi possível enviar a foto: '+up.message+'. Verifique se a migração de fotos foi executada.');const {error:meta}=await sb.from('device_photos').insert({store_id:storeId,device_id:created.id,storage_path:path,caption:d.photo_category||'Detalhes',sort_order:i,para_anuncio:false,created_by:user.id});if(meta)throw new Error('Foto enviada, mas o registro da foto falhou: '+meta.message)}}await uploadAdPhotos(created.id,d.adPhotos);if(d.has_invoice===true)await saveInvoiceAttachment(created.id,d.invoiceFile);if(d.payment_status==='paid'){const {error:ce}=await sb.from('cash_movements').insert({store_id:storeId,description:'Compra: '+d.model,movement_type:'out',category:'Compra de mercadoria',amount:cost,movement_date:d.purchase_date,purchase_id:p.id,created_by:user.id});if(ce)throw ce}}
+async function createSale(d){const dev=devices.find(x=>x.id===d.device_id&&x.status==='in_stock');if(!dev)throw new Error('Aparelho não está mais disponível. Atualize a tela.');if(!d.channel)throw new Error('Selecione o canal de venda.');if(d.channel==='Outro'&&!d.channel_other?.trim())throw new Error('Informe qual foi o outro canal.');const gross=Number(d.total_amount),discount=Number(d.discount_amount)||0,fee=Number(d.fee_amount)||0,net=gross-discount-fee;if(!Number.isFinite(gross)||gross<=0||net<0)throw new Error('Informe um valor válido. Desconto e taxa não podem superar o valor bruto.');const salePayload={customer:d.customer||null,sale_date:d.sale_date,total_amount:gross,payment_method:d.payment_method,payment_status:d.payment_status,channel:d.channel,channel_other:d.channel==='Outro'?d.channel_other.trim():null,discount_amount:discount,fee_amount:fee,net_amount:net,installments:Number(d.installments)||1,notes:d.notes||null,seller_name:user.email||'Integrante da equipe'};const {data:s,error}=await sb.rpc('kgl_create_sale_atomic',{p_store_id:storeId,p_device_id:dev.id,p_sale:salePayload});if(error)throw error;return s}
+async function createExpense(d){const {data:x,error}=await sb.from('expenses').insert({store_id:storeId,description:d.description,category:d.category,amount:Number(d.amount),expense_date:d.expense_date,created_by:user.id}).select().single();if(error)throw error;const {error:me}=await sb.from('cash_movements').insert({store_id:storeId,description:d.description,movement_type:'out',category:d.category,amount:Number(d.amount),movement_date:d.expense_date,created_by:user.id});if(me)throw me}
+async function createIncome(d){const {error}=await sb.from('cash_movements').insert({store_id:storeId,description:d.description,movement_type:'in',category:d.category,amount:Number(d.amount),movement_date:d.movement_date,created_by:user.id});if(error)throw error}
+async function sellDevice(id){openForm('sale');$('formFields').querySelector('[name=device_id]').value=id;const d=devices.find(x=>x.id===id);$('formFields').querySelector('[name=total_amount]').value=d.sale_price||''}
+async function markSalePaid(id){try{const {error}=await sb.rpc('kgl_set_sale_payment_status',{p_store_id:storeId,p_sale_id:id,p_payment_status:'paid',p_movement_date:dateNow()});if(error)throw error;await loadAll();toast('Venda marcada como recebida.')}catch(e){toast('Erro: '+e.message)}}
+
+function calcCardFee(){const desired=Number($('feeDesiredNet')?.value)||0,rate=(Number($('feePercent')?.value)||0)/100,n=Math.max(1,Number($('feeInstallments')?.value)||1);if(rate<0||rate>=1){$('feeValue').textContent='—';$('feeGrossOut').textContent='—';$('feeEach').textContent='—';$('feeNet').textContent='—';return}const gross=desired/(1-rate),fee=gross-desired;$('feeValue').textContent=money(fee);$('feeGrossOut').textContent=money(gross);$('feeEach').textContent=money(gross/n);$('feeNet').textContent=money(desired)}
+function renderStockAlerts(){const cutoff=Date.now()-30*86400000;const stale=devices.filter(d=>d.status==='in_stock'&&d.created_at&&new Date(d.created_at).getTime()<cutoff);$('stockAlertCount').textContent=stale.length+' alertas';$('stockAlerts').innerHTML=stale.length?'<ul>'+stale.map(d=>'<li><b>'+esc(d.model)+'</b> • '+esc(d.storage||'')+' • parado há '+Math.floor((Date.now()-new Date(d.created_at).getTime())/86400000)+' dias • custo '+money(d.cost_price)+'</li>').join('')+'</ul>':'Nenhum aparelho disponível há mais de 30 dias.'}
+
+let marketLookup={median:0,prices:[],count:0,links:{}};
+function marketQuery(){return [$('iModel').value,$('iStorage').value,'usado'].filter(Boolean).join(' ').trim()}
+async function searchMarketPrices(){
+ const query=marketQuery(), encoded=encodeURIComponent(query);
+ const links={
+  'Mercado Livre':'https://lista.mercadolivre.com.br/'+encodeURIComponent(query.toLowerCase().replace(/\s+/g,'-')),
+  'OLX':'https://www.olx.com.br/brasil?q='+encoded,
+  'Amazon':'https://www.amazon.com.br/s?k='+encoded
+ };
+ $('marketResults').innerHTML='<div class="notice">Consultando anúncios atuais do Mercado Livre e preparando comparativos na OLX e Amazon…</div>';
+ try{
+  const url='https://api.mercadolibre.com/sites/MLB/search?q='+encodeURIComponent(query)+'&condition=used&limit=50&sort=relevance';
+  const response=await fetch(url,{headers:{'Accept':'application/json'}});
+  if(!response.ok)throw new Error('Mercado Livre respondeu HTTP '+response.status);
+  const data=await response.json();
+  const modelDigits=(($('iModel').value.match(/\d+/g)||[]).join(''));
+  const storageDigits=(($('iStorage').value.match(/\d+/g)||[]).join(''));
+  let rows=(data.results||[]).filter(x=>Number(x.price)>0&&x.title&&(!modelDigits||x.title.toLowerCase().includes(modelDigits))&&(!storageDigits||new RegExp(storageDigits+'\\s?gb','i').test(x.title)));
+  if(rows.length<4)rows=(data.results||[]).filter(x=>Number(x.price)>0&&x.title&&(!modelDigits||x.title.toLowerCase().includes(modelDigits)));
+  const prices=rows.map(x=>Number(x.price)).filter(x=>x>300&&x<30000).sort((a,b)=>a-b);
+  if(prices.length<3)throw new Error('Poucos anúncios comparáveis foram encontrados. Confira os links e tente uma busca mais específica.');
+  const mid=Math.floor(prices.length/2),median=prices.length%2?prices[mid]:(prices[mid-1]+prices[mid])/2;
+  marketLookup={median,prices,count:prices.length,links};
+  const min=prices[Math.max(0,Math.floor(prices.length*.1))],max=prices[Math.min(prices.length-1,Math.ceil(prices.length*.9)-1)];
+  $('marketResults').innerHTML=`<b>Referência de mercado encontrada</b><div class="market-stats"><div class="market-stat"><small>Menor faixa (10%)</small><strong>${money(min)}</strong></div><div class="market-stat"><small>Mediana de ${prices.length} anúncios</small><strong>${money(median)}</strong></div><div class="market-stat"><small>Maior faixa (90%)</small><strong>${money(max)}</strong></div></div><div class="notice">Fonte automática: API pública de busca do Mercado Livre. Os valores são preços anunciados, não vendas concluídas. A busca considera título/modelo e armazenamento quando identificados; revise os anúncios equivalentes antes de decidir.</div><div class="market-links"><a target="_blank" rel="noopener" href="${links['Mercado Livre']}">Mercado Livre</a><a target="_blank" rel="noopener" href="${links['OLX']}">OLX</a><a target="_blank" rel="noopener" href="${links['Amazon']}">Amazon</a></div>`;
+  toast('Referência de mercado atualizada.');
+ }catch(err){
+  marketLookup={median:0,prices:[],count:0,links};
+  $('marketResults').innerHTML=`<div class="notice">Não foi possível obter automaticamente uma amostra confiável do Mercado Livre: ${esc(err.message)}. Os marketplaces foram abertos para consulta manual. Não vamos inventar uma cotação.</div><div class="market-links"><a target="_blank" rel="noopener" href="${links['Mercado Livre']}">Mercado Livre</a><a target="_blank" rel="noopener" href="${links['OLX']}">OLX</a><a target="_blank" rel="noopener" href="${links['Amazon']}">Amazon</a></div>`;
+ }
+}
+function analyzeDeal(){
+ const cost=Number($('iCost').value)||0,market=marketLookup.median,repair=Number($('iRepair').value)||0,other=Number($('iOther').value)||0,margin=(Number($('iMargin').value)||15)/100,battery=Number($('iBattery').value)||0,cond=$('iCondition').value,invoice=$('iInvoice').value,box=$('iBox').value,acc=$('iAccessories').value,imei=$('iImei').value;
+ let pros=[],cons=[];
+ if(invoice==='yes')pros.push('Possui nota fiscal informada.');else cons.push('Sem nota fiscal: exigir comprovação de procedência.');
+ if(box==='yes')pros.push('Acompanha caixa original.');else cons.push('Sem caixa original.');
+ if(acc==='yes')pros.push('Acompanha acessórios.');else cons.push('Sem acessórios informados.');
+ if(imei==='yes')pros.push('IMEI informado como verificado; confirme em fonte oficial.');else cons.push('IMEI não verificado: não comprar antes da conferência.');
+ if(battery>=90)pros.push('Saúde da bateria elevada ('+battery+'%).');else if(battery>=80)cons.push('Bateria em '+battery+'%: considerar desgaste e possível troca na negociação.');else cons.push('Bateria abaixo de 80%: risco maior de custo de substituição.');
+ if(cond==='excellent')pros.push('Condição física informada como excelente.');
+ if(cond==='good')cons.push('Marcas leves: conferir fotos e funcionamento.');
+ if(cond==='fair')cons.push('Avarias visíveis: estimar desvalorização.');
+ if(cond==='repair')cons.push('Necessita reparo: orçamento técnico obrigatório.');
+ $('intelResult').classList.remove('hidden');
+ $('iPros').innerHTML=pros.map(x=>'<li>'+esc(x)+'</li>').join('');
+ $('iCons').innerHTML=cons.map(x=>'<li>'+esc(x)+'</li>').join('');
+ if(!market){
+  $('intelVerdict').textContent='Faça a busca de mercado primeiro';$('iMax').textContent='—';$('iAsk').textContent='—';$('iProfit').textContent='—';$('iMarginOut').textContent='—';
+  $('iExplanation').textContent='Clique em “Buscar preços nos marketplaces”. A análise só será calculada depois que houver anúncios atuais suficientes para formar uma referência.';
+  return;
+ }
+ const extra=repair+other,max=Math.max(0,market*(1-margin)-extra),profit=market-cost-extra,actual=market?profit/market*100:0;
+ const verdict=cost<=max&&imei==='yes'&&battery>=80&&cond!=='repair'?'Bom negócio':cost<=max*1.08&&imei==='yes'&&cond!=='repair'?'Negociar':'Não recomendado';
+ $('intelVerdict').className='pill '+(verdict==='Bom negócio'?'':verdict==='Negociar'?'amber':'red');
+ $('intelVerdict').textContent=verdict;$('iMax').textContent=money(max);$('iAsk').textContent=money(market);$('iProfit').textContent=money(profit);$('iMarginOut').textContent=actual.toFixed(1)+'%';
+ $('iExplanation').textContent='Referência: mediana de '+marketLookup.count+' anúncios usados encontrados no Mercado Livre ('+money(market)+'). Com custos adicionais de '+money(extra)+' e margem desejada de '+(margin*100).toFixed(1)+'%, o teto de compra é '+money(max)+'. Preços são anúncios ativos, não histórico de vendas; confirme condição, armazenamento e reputação dos vendedores.';
+}
+async function openGoalForm(){const month=prompt('Mês da meta (AAAA-MM):',new Date().toISOString().slice(0,7));if(!month)return;const revenue=Number(prompt('Meta de faturamento (R$):','10000'));if(!Number.isFinite(revenue))return;const profit=Number(prompt('Meta de lucro (R$):','1500'));if(!Number.isFinite(profit))return;try{const {error}=await sb.from('monthly_goals').upsert({store_id:storeId,month,revenue_target:revenue,profit_target:profit,created_by:user.id},{onConflict:'store_id,month'});if(error)throw error;await loadAll();toast('Meta salva.')}catch(e){toast('Erro ao salvar meta: '+e.message)}}
+function renderGoals(){$('goalCards').innerHTML=goals.slice(0,3).map(g=>{const m=String(g.month).slice(0,7),ss=sales.filter(s=>String(s.sale_date).slice(0,7)===m),rev=ss.reduce((a,s)=>a+Number(s.total_amount||0),0);return `<div class="metric"><label>Meta ${esc(m)}</label><strong>${money(g.revenue_target)}</strong><small>Faturamento realizado: ${money(rev)}</small></div>`}).join('')||'<div class="notice">Nenhuma meta cadastrada.</div>';$('goalRows').innerHTML=goals.map(g=>{const m=String(g.month).slice(0,7),ss=sales.filter(s=>String(s.sale_date).slice(0,7)===m),rev=ss.reduce((a,s)=>a+Number(s.total_amount||0),0),ids=ss.map(s=>s.id),cost=devices.filter(d=>ids.includes(d.sale_id)).reduce((a,d)=>a+Number(d.cost_price||0),0),p=rev-cost;return `<tr><td>${esc(m)}</td><td>${money(g.revenue_target)}</td><td>${money(rev)}</td><td>${money(g.profit_target)}</td><td>${money(p)}</td><td>${g.revenue_target?Math.round(rev/Number(g.revenue_target)*100):0}%</td></tr>`}).join('')||'<tr><td colspan="6" class="empty">Nenhuma meta cadastrada.</td></tr>'}
+async function openSupplierForm(){const name=prompt('Nome do fornecedor:');if(!name)return;const contact=prompt('Contato (opcional):')||null;try{const {error}=await sb.from('suppliers').insert({store_id:storeId,name:name.trim(),contact});if(error)throw error;await loadAll();toast('Fornecedor cadastrado.')}catch(e){toast('Erro: '+e.message)}}
+function renderSuppliers(){const names=[...new Set([...suppliers.map(s=>s.name),...purchases.map(p=>p.supplier).filter(Boolean)])];$('supplierRows').innerHTML=names.map(name=>{const ps=purchases.filter(p=>(p.supplier||'').toLowerCase()===name.toLowerCase()),total=ps.reduce((a,p)=>a+Number(p.total_amount||0),0),last=ps.map(p=>p.purchase_date).sort().reverse()[0];return `<tr><td>${esc(name)}</td><td>${ps.length}</td><td>${money(total)}</td><td>${money(ps.length?total/ps.length:0)}</td><td>${fmt(last)}</td></tr>`}).join('')||'<tr><td colspan="5" class="empty">Nenhum fornecedor cadastrado.</td></tr>'}
+function downloadBackup(){const payload={exported_at:new Date().toISOString(),store:storeLabel,devices,sales,purchases,expenses,cash_movements:moves,monthly_goals:goals,suppliers};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='KGL_STORE_backup_'+dateNow()+'.json';a.click();URL.revokeObjectURL(url);$('backupStatus').textContent='Backup JSON gerado em '+new Date().toLocaleString('pt-BR')+'. Fotos não estão incluídas.'}
+
+boot();
+</script>
+<script>
+/* =====================================================================
+   KGL GESTÃO — ACESSÓRIOS e LOJA ONLINE
+   (visitas/cliques, avise-me e depoimentos)
+   Usa as mesmas variáveis do painel: sb, storeId, user, devices, $, esc,
+   money, toast, loadAll.
+   ===================================================================== */
+const ACC_CATEGORIAS = ['Capinhas', 'Películas', 'Cabos', 'Carregadores', 'Fones', 'Power banks', 'Suportes', 'Outros'];
+const ACC_MARCAS = ['Originais Apple', 'Baseus'];
+const ACC_CANAIS = ['Loja', 'WhatsApp', 'Instagram', 'Site', 'Junto com iPhone', 'Outro'];
+const ACC_PAGTO = ['Pix', 'Dinheiro', 'Cartão de crédito', 'Cartão de débito', 'Transferência'];
+let accList = [], accPhotos = {}, accPurch = [], accSales = [], alertsList = [], testimonialsList = [], siteEvents = [];
+const xHoje = () => { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
+const xDataBR = s => s ? new Date(String(s).slice(0, 10) + 'T12:00:00').toLocaleDateString('pt-BR') : '—';
+const xOpts = (arr, sel) => arr.map(x => `<option ${x === sel ? 'selected' : ''}>${esc(x)}</option>`).join('');
+const xUniq = arr => [...new Set(arr.filter(Boolean))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+
+/* ---------- carregar dados ---------- */
+async function loadExtras() {
+  if (!storeId) return;
+  const desde = new Date(Date.now() - 30 * 864e5).toISOString();
+  const q = [
+    sb.from('accessories').select('*').eq('store_id', storeId).order('nome'),
+    sb.from('accessory_photos').select('accessory_id,storage_path,sort_order').eq('store_id', storeId).order('sort_order'),
+    sb.from('accessory_purchases').select('*').eq('store_id', storeId).order('data', { ascending: false }).limit(300),
+    sb.from('accessory_sales').select('*').eq('store_id', storeId).order('data', { ascending: false }).limit(300),
+    sb.from('stock_alerts').select('*').eq('store_id', storeId).order('created_at', { ascending: false }).limit(300),
+    sb.from('testimonials').select('*').eq('store_id', storeId).order('ordem').order('created_at', { ascending: false }),
+    sb.from('site_events').select('tipo,item_tipo,item_id,created_at').eq('store_id', storeId).gte('created_at', desde).limit(20000)
+  ];
+  const r = await Promise.all(q);
+  const falhou = r.find(x => x.error);
+  if (falhou) {
+    console.warn('KGL extras:', falhou.error);
+    const aviso = 'Rode o arquivo 2-supabase-acessorios-e-melhorias.sql no Supabase para ativar esta área.';
+    ['accRows', 'onlineRows', 'alertRows', 'testRows'].forEach(id => { if ($(id)) $(id).innerHTML = `<tr><td colspan="9" class="empty">${aviso}</td></tr>`; });
+    return;
+  }
+  [accList, , accPurch, accSales, alertsList, testimonialsList, siteEvents] = r.map(x => x.data || []);
+  accPhotos = {};
+  const fotos = r[1].data || [];
+  const urls = await xAssinar(fotos.map(f => f.storage_path));
+  fotos.forEach(f => { (accPhotos[f.accessory_id] = accPhotos[f.accessory_id] || []).push({ path: f.storage_path, url: urls[f.storage_path] }); });
+  renderAccessories(); renderOnline(); renderBadges();
+}
+async function xAssinar(paths) {
+  const mapa = {};
+  if (!paths.length) return mapa;
+  const { data } = await sb.storage.from('kgl-device-photos').createSignedUrls(paths, 3600);
+  (data || []).forEach(x => { if (x.signedUrl) mapa[x.path] = x.signedUrl; });
+  return mapa;
+}
+const _loadAllOriginal = loadAll;
+loadAll = async function () { await _loadAllOriginal(); await loadExtras(); };
+/* Se o painel já tiver começado a carregar antes deste trecho, busca os extras assim que a loja estiver definida */
+(function () { let n = 0; const t = setInterval(() => { n++; if (typeof storeId !== 'undefined' && storeId) { clearInterval(t); loadExtras(); } else if (n > 200) clearInterval(t); }, 300); })();
+
+function renderBadges() {
+  const pend = alertsList.filter(a => !a.atendido).length;
+  document.querySelectorAll('[data-online-badge]').forEach(el => { el.textContent = pend ? pend : ''; el.hidden = !pend; });
+}
+
+/* ---------- ACESSÓRIOS: tela ---------- */
+function renderAccessories() {
+  if (!$('accRows')) return;
+  const cat = $('accCat').value, marca = $('accMarca').value, busca = ($('accSearch').value || '').toLowerCase();
+  $('accCat').innerHTML = '<option value="">Todas as categorias</option>' + xOpts(xUniq([...ACC_CATEGORIAS, ...accList.map(a => a.categoria)]), cat);
+  $('accMarca').innerHTML = '<option value="">Todas as marcas</option>' + xOpts(xUniq([...ACC_MARCAS, ...accList.map(a => a.marca)]), marca);
+  const lista = accList.filter(a => (!cat || a.categoria === cat) && (!marca || a.marca === marca) &&
+    (!busca || [a.nome, a.categoria, a.marca, a.cor, a.compatibilidade].join(' ').toLowerCase().includes(busca)));
+  $('accRows').innerHTML = lista.map(a => {
+    const foto = accPhotos[a.id]?.[0]?.url;
+    const est = a.estoque <= 0 ? '<span class="pill red">Esgotado</span>' : a.estoque <= 2 ? `<span class="pill amber">${a.estoque} un.</span>` : `<b>${a.estoque}</b> un.`;
+    const site = !a.site_publicar ? '<span class="muted">Oculto</span>' : a.estoque > 0 ? '<span class="pill">No site</span>' : '<span class="muted">Sem estoque</span>';
+    return `<tr><td>${foto ? `<img class="device-thumb" src="${foto}" alt="">` : '<span class="device-thumb" style="display:grid;place-items:center">🎧</span>'}</td>
+      <td><b>${esc(a.nome)}</b>${a.site_destaque ? ` <span class="tag-site">${esc(a.site_destaque)}</span>` : ''}<br><span class="muted">${esc([a.categoria, a.marca, a.cor].filter(Boolean).join(' • '))}</span></td>
+      <td>${esc(a.compatibilidade || 'Universal')}</td><td>${est}</td><td>${money(a.custo_medio)}</td><td>${money(a.preco_venda)}</td><td>${site}</td>
+      <td class="accList-acoes"><button class="secondary" onclick="accForm('${a.id}')">Editar</button><button class="secondary" onclick="accCompraForm('${a.id}')">+ Compra</button><button onclick="accVendaForm('${a.id}')" ${a.estoque > 0 ? '' : 'disabled'}>Vender</button></td></tr>`;
+  }).join('') || '<tr><td colspan="8" class="empty">Nenhum acessório cadastrado. Clique em "＋ Novo produto".</td></tr>';
+
+  const mes = xHoje().slice(0, 7);
+  const vMes = accSales.filter(v => String(v.data).startsWith(mes));
+  const fat = vMes.reduce((t, v) => t + v.quantidade * v.preco_unitario - Number(v.desconto || 0), 0);
+  const lucro = vMes.reduce((t, v) => t + v.quantidade * (v.preco_unitario - v.custo_unitario) - Number(v.desconto || 0), 0);
+  $('accUnits').textContent = accList.reduce((t, a) => t + a.estoque, 0) + ' un.';
+  $('accStockValue').textContent = money(accList.reduce((t, a) => t + a.estoque * a.custo_medio, 0));
+  $('accMonthRevenue').textContent = money(fat);
+  $('accMonthProfit').textContent = money(lucro);
+
+  const nome = id => accList.find(a => a.id === id)?.nome || 'Produto removido';
+  const movs = [
+    ...accPurch.map(c => ({ tipo: 'Compra', id: c.id, data: c.data, criado: c.created_at, item: nome(c.accessory_id), qtd: c.quantidade, valor: c.quantidade * c.custo_unitario, extra: c.fornecedor || '' })),
+    ...accSales.map(v => ({ tipo: 'Venda', id: v.id, data: v.data, criado: v.created_at, item: nome(v.accessory_id), qtd: v.quantidade, valor: v.quantidade * v.preco_unitario - Number(v.desconto || 0), extra: [v.cliente, v.canal].filter(Boolean).join(' • ') }))
+  ].sort((a, b) => String(b.data + b.criado).localeCompare(String(a.data + a.criado))).slice(0, 60);
+  $('accMoveRows').innerHTML = movs.map(m => `<tr><td>${xDataBR(m.data)}</td><td><span class="pill ${m.tipo === 'Venda' ? '' : 'amber'}">${m.tipo}</span></td><td>${esc(m.item)}</td><td>${m.qtd}</td><td class="${m.tipo === 'Venda' ? 'positive' : 'negative'}">${money(m.valor)}</td><td class="muted">${esc(m.extra)}</td><td><button class="secondary" onclick="accEstornar('${m.tipo}','${m.id}')">Excluir</button></td></tr>`).join('') || '<tr><td colspan="7" class="empty">Nenhuma movimentação ainda.</td></tr>';
+}
+
+/* ---------- modal próprio ---------- */
+function xModal(titulo, html, onSave, textoBotao = 'Salvar') {
+  $('xForm').oninput = null;
+  $('xTitle').textContent = titulo;
+  $('xFields').innerHTML = html;
+  $('xSave').textContent = textoBotao;
+  $('xForm').onsubmit = async e => {
+    e.preventDefault();
+    const b = $('xSave'); b.disabled = true; const t = b.textContent; b.textContent = 'Salvando...';
+    try { await onSave(Object.fromEntries(new FormData(e.target)), e.target); xClose(); await loadExtras(); toast('Salvo!'); }
+    catch (err) { console.error(err); toast('Erro: ' + (err.message || err)); }
+    finally { b.disabled = false; b.textContent = t; }
+  };
+  $('xModal').classList.add('open');
+}
+function xClose() { $('xModal').classList.remove('open'); }
+const xf = (n, l, t = 'text', extra = '', full = false) => `<div class="field${full ? ' full' : ''}"><label>${l}</label><input name="${n}" type="${t}" ${extra}></div>`;
+const xs = (n, l, html, full = false) => `<div class="field${full ? ' full' : ''}"><label>${l}</label><select name="${n}">${html}</select></div>`;
+
+/* ---------- produto ---------- */
+function accForm(id) {
+  const a = accList.find(x => x.id === id) || { site_publicar: true };
+  const novo = !a.id;
+  const fotos = accPhotos[a.id] || [];
+  const html = `<div class="formgrid">
+    ${xf('nome', 'Nome do produto', 'text', `required value="${esc(a.nome || '')}" placeholder="Ex.: Capinha de silicone MagSafe"`, true)}
+    <div class="field"><label>Categoria</label><input name="categoria" list="accCatList" required value="${esc(a.categoria || '')}" placeholder="Capinhas, Películas, Cabos..."></div>
+    <div class="field"><label>Marca</label><input name="marca" list="accMarcaList" required value="${esc(a.marca || '')}" placeholder="Originais Apple, Baseus..."></div>
+    <datalist id="accCatList">${xOpts(xUniq([...ACC_CATEGORIAS, ...accList.map(x => x.categoria)]))}</datalist>
+    <datalist id="accMarcaList">${xOpts(xUniq([...ACC_MARCAS, ...accList.map(x => x.marca)]))}</datalist>
+    ${xf('compatibilidade', 'Compatível com (vazio = universal)', 'text', `value="${esc(a.compatibilidade || '')}" placeholder="Ex.: iPhone 15, iPhone 15 Pro"`)}
+    ${xf('cor', 'Cor', 'text', `value="${esc(a.cor || '')}"`)}
+    ${xf('preco_venda', 'Preço de venda (R$)', 'number', `min="0" step="0.01" required value="${Number(a.preco_venda || 0) || ''}"`)}
+    ${xs('site_publicar', 'Mostrar no site?', `<option value="true" ${a.site_publicar !== false ? 'selected' : ''}>Sim, quando tiver estoque</option><option value="false" ${a.site_publicar === false ? 'selected' : ''}>Não</option>`)}
+    ${xs('site_destaque', 'Destaque na página inicial', `<option value="">Sem destaque</option>${xOpts(['Oferta', 'Novidade'], a.site_destaque)}`, true)}
+    <div class="field full"><label>Descrição para o site</label><textarea name="descricao" rows="3">${esc(a.descricao || '')}</textarea></div>
+    ${novo ? `<div class="field full site-box"><label>Estoque inicial (opcional)</label><small class="site-hint">Se já tem unidades, informe aqui que a compra é registrada junto.</small></div>
+      ${xf('qtd_inicial', 'Quantidade', 'number', 'min="0" step="1" placeholder="0"')}${xf('custo_inicial', 'Custo por unidade (R$)', 'number', 'min="0" step="0.01" placeholder="0,00"')}` : ''}
+    <div class="field full photo-upload-field ad-photo-field"><label>✨ Fotos do produto <span class="tag-site">vão para o site</span></label>
+      ${fotos.length ? `<div class="existing-photos">${fotos.map(p => `<div class="photo-kind"><img src="${p.url || ''}" alt=""><button type="button" class="photo-move" onclick="accRemoverFoto('${a.id}','${p.path.replace(/'/g, "\\'")}')">Remover</button></div>`).join('')}</div>` : ''}
+      <input name="fotos" type="file" accept="image/*" multiple><small>A primeira foto é a principal. Até 8 por envio, 8 MB cada.</small></div>
+  </div>
+  ${novo ? '' : `<p class="notice">Para apagar o produto, zere o estoque e use o botão abaixo.</p><button type="button" class="danger" onclick="accExcluir('${a.id}')">Excluir produto</button>`}`;
+  xModal(novo ? 'Novo acessório' : 'Editar acessório', html, async (d, form) => {
+    const preco = Number(d.preco_venda);
+    if (!(preco >= 0)) throw new Error('Informe um preço válido.');
+    const reg = {
+      nome: d.nome.trim(), categoria: d.categoria.trim(), marca: d.marca.trim(),
+      compatibilidade: d.compatibilidade.trim() || null, cor: d.cor.trim() || null, descricao: d.descricao.trim() || null,
+      preco_venda: preco, site_publicar: d.site_publicar !== 'false', site_destaque: d.site_destaque || null
+    };
+    let accId = a.id;
+    if (novo) {
+      const { data, error } = await sb.from('accessories').insert({ ...reg, store_id: storeId, created_by: user.id }).select().single();
+      if (error) throw error; accId = data.id;
+      const q = Number(d.qtd_inicial || 0);
+      if (q > 0) await xRegistrarCompra({ accessory_id: accId, quantidade: q, custo_unitario: Number(d.custo_inicial || 0), fornecedor: '', data: xHoje(), pago: 'false' }, reg.nome);
+    } else {
+      const { error } = await sb.from('accessories').update(reg).eq('id', accId).eq('store_id', storeId);
+      if (error) throw error;
+    }
+    await xEnviarFotosAcc(accId, [...(form.querySelector('[name=fotos]').files || [])]);
+  });
+}
+async function xEnviarFotosAcc(accId, files) {
+  if (!files.length) return;
+  if (files.length > 8) throw new Error('Envie no máximo 8 fotos por vez.');
+  const base = (accPhotos[accId] || []).length;
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    if (!file.type.startsWith('image/')) throw new Error('Envie somente imagens.');
+    if (file.size > 8 * 1024 * 1024) throw new Error(file.name + ' passa de 8 MB.');
+    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg';
+    const path = `${storeId}/acessorios/${accId}/${Date.now()}_${i}.${ext}`;
+    const { error: up } = await sb.storage.from('kgl-device-photos').upload(path, file, { contentType: file.type, upsert: false });
+    if (up) throw new Error('Falha ao enviar foto: ' + up.message);
+    const { error } = await sb.from('accessory_photos').insert({ store_id: storeId, accessory_id: accId, storage_path: path, sort_order: base + i, created_by: user.id });
+    if (error) { await sb.storage.from('kgl-device-photos').remove([path]); throw error; }
+  }
+}
+async function accRemoverFoto(accId, path) {
+  if (!confirm('Remover esta foto?')) return;
+  const { error } = await sb.from('accessory_photos').delete().eq('store_id', storeId).eq('storage_path', path);
+  if (error) return toast('Erro: ' + error.message);
+  await sb.storage.from('kgl-device-photos').remove([path]);
+  await loadExtras(); accForm(accId);
+}
+async function accExcluir(id) {
+  const a = accList.find(x => x.id === id);
+  if (a.estoque > 0) return toast('Ainda há ' + a.estoque + ' unidade(s). Para esconder do site, use "Mostrar no site? = Não".');
+  if (!confirm('Excluir "' + a.nome + '" e todo o histórico de compras e vendas dele?')) return;
+  const paths = (accPhotos[id] || []).map(p => p.path);
+  const { error } = await sb.from('accessories').delete().eq('id', id).eq('store_id', storeId);
+  if (error) return toast('Erro: ' + error.message);
+  if (paths.length) await sb.storage.from('kgl-device-photos').remove(paths);
+  xClose(); await loadExtras(); toast('Produto excluído.');
+}
+
+/* ---------- compra ---------- */
+function xProdutoSelect(sel, soComEstoque) {
+  const l = accList.filter(a => !soComEstoque || a.estoque > 0);
+  return l.map(a => `<option value="${a.id}" ${a.id === sel ? 'selected' : ''}>${esc(a.nome)} — ${esc(a.marca)}${soComEstoque ? ' (' + a.estoque + ' un.)' : ''}</option>`).join('');
+}
+function accCompraForm(id) {
+  if (!accList.length) return toast('Cadastre o produto primeiro em "＋ Novo produto".');
+  const html = `<div class="formgrid">
+    ${xs('accessory_id', 'Produto', xProdutoSelect(id), true)}
+    ${xf('quantidade', 'Quantidade', 'number', 'min="1" step="1" required value="1"')}
+    ${xf('custo_unitario', 'Custo por unidade (R$)', 'number', 'min="0" step="0.01" required')}
+    ${xf('fornecedor', 'Fornecedor', 'text', 'placeholder="Opcional"')}
+    ${xf('data', 'Data da compra', 'date', `required value="${xHoje()}"`)}
+    ${xs('pago', 'Pagamento', '<option value="true">Pago (sai do caixa)</option><option value="false">Ainda não pago / já lançado</option>', true)}
+  </div>`;
+  xModal('Registrar compra de acessório', html, d => xRegistrarCompra(d));
+}
+async function xRegistrarCompra(d, nomeProduto) {
+  const q = Number(d.quantidade), c = Number(d.custo_unitario);
+  if (!(q > 0) || !(c >= 0)) throw new Error('Informe quantidade e custo válidos.');
+  const pago = d.pago === 'true';
+  const { data, error } = await sb.from('accessory_purchases').insert({ store_id: storeId, accessory_id: d.accessory_id, quantidade: q, custo_unitario: c, fornecedor: d.fornecedor || null, data: d.data, pago, created_by: user.id }).select().single();
+  if (error) throw error;
+  if (pago && q * c > 0) {
+    const nome = nomeProduto || accList.find(a => a.id === d.accessory_id)?.nome || 'acessório';
+    const { error: ce } = await sb.from('cash_movements').insert({ store_id: storeId, description: `Compra acessório: ${q}x ${nome}`, movement_type: 'out', category: 'Compra de acessórios', amount: q * c, movement_date: d.data, accessory_ref: data.id, created_by: user.id });
+    if (ce) throw ce;
+  }
+}
+
+/* ---------- venda ---------- */
+function accVendaForm(id) {
+  if (!accList.some(a => a.estoque > 0)) return toast('Nenhum acessório com estoque.');
+  const a = accList.find(x => x.id === id && x.estoque > 0) || accList.find(x => x.estoque > 0);
+  const html = `<div class="formgrid">
+    ${xs('accessory_id', 'Produto', xProdutoSelect(a.id, true), true)}
+    ${xf('quantidade', 'Quantidade', 'number', 'min="1" step="1" required value="1"')}
+    ${xf('preco_unitario', 'Preço por unidade (R$)', 'number', `min="0" step="0.01" required value="${Number(a.preco_venda) || ''}"`)}
+    ${xf('desconto', 'Desconto total (R$)', 'number', 'min="0" step="0.01" value="0"')}
+    ${xf('cliente', 'Cliente', 'text', 'placeholder="Opcional"')}
+    ${xs('canal', 'Canal', xOpts(ACC_CANAIS))}
+    ${xs('forma_pagamento', 'Forma de pagamento', xOpts(ACC_PAGTO))}
+    ${xf('data', 'Data da venda', 'date', `required value="${xHoje()}"`)}
+    ${xs('recebido', 'Recebimento', '<option value="true">Recebido (entra no caixa)</option><option value="false">A receber</option>')}
+    <p class="notice full" id="accVendaTotal"></p>
+  </div>`;
+  xModal('Registrar venda de acessório', html, async d => {
+    const q = Number(d.quantidade), p = Number(d.preco_unitario), desc = Number(d.desconto || 0);
+    const prod = accList.find(x => x.id === d.accessory_id);
+    if (!(q > 0) || !(p >= 0)) throw new Error('Informe quantidade e preço válidos.');
+    if (q > prod.estoque) throw new Error('Só há ' + prod.estoque + ' unidade(s) em estoque.');
+    const total = q * p - desc;
+    if (total < 0) throw new Error('O desconto não pode passar do valor da venda.');
+    const { data, error } = await sb.from('accessory_sales').insert({ store_id: storeId, accessory_id: d.accessory_id, quantidade: q, preco_unitario: p, desconto: desc, cliente: d.cliente || null, canal: d.canal, forma_pagamento: d.forma_pagamento, data: d.data, created_by: user.id }).select().single();
+    if (error) throw error;
+    if (d.recebido === 'true' && total > 0) {
+      const { error: ce } = await sb.from('cash_movements').insert({ store_id: storeId, description: `Venda acessório: ${q}x ${prod.nome}`, movement_type: 'in', category: 'Venda de acessórios', amount: total, movement_date: d.data, accessory_ref: data.id, created_by: user.id });
+      if (ce) throw ce;
+    }
+  }, 'Registrar venda');
+  const atualizar = () => {
+    const fm = $('xForm'); const p = accList.find(x => x.id === fm.accessory_id.value);
+    const t = Number(fm.quantidade.value || 0) * Number(fm.preco_unitario.value || 0) - Number(fm.desconto.value || 0);
+    const lucro = t - Number(fm.quantidade.value || 0) * Number(p?.custo_medio || 0);
+    $('accVendaTotal').innerHTML = `Total: <b>${money(t)}</b> · lucro estimado: <b>${money(lucro)}</b>`;
+  };
+  $('xForm').accessory_id.onchange = () => { const p = accList.find(x => x.id === $('xForm').accessory_id.value); $('xForm').preco_unitario.value = Number(p?.preco_venda) || ''; atualizar(); };
+  $('xForm').oninput = atualizar; atualizar();
+}
+
+/* ---------- estorno ---------- */
+async function accEstornar(tipo, id) {
+  if (!confirm(`Excluir esta ${tipo.toLowerCase()}? O estoque é corrigido e o lançamento no caixa também é removido.`)) return;
+  const tabela = tipo === 'Venda' ? 'accessory_sales' : 'accessory_purchases';
+  const { error } = await sb.from(tabela).delete().eq('id', id).eq('store_id', storeId);
+  if (error) return toast('Erro: ' + error.message);
+  await sb.from('cash_movements').delete().eq('store_id', storeId).eq('accessory_ref', id);
+  await loadAll(); toast(tipo + ' excluída.');
+}
+
+/* =====================================================================
+   LOJA ONLINE
+   ===================================================================== */
+function renderOnline() {
+  if (!$('onlineRows')) return;
+  const porItem = {};
+  siteEvents.forEach(e => {
+    const k = e.item_tipo + ':' + e.item_id;
+    const o = porItem[k] = porItem[k] || { item_tipo: e.item_tipo, item_id: e.item_id, visita: 0, whatsapp: 0, compartilhar: 0 };
+    o[e.tipo]++;
+  });
+  const nomeItem = o => {
+    if (o.item_tipo === 'aparelho') { const d = devices.find(x => x.id === o.item_id); return d ? `${d.model} ${d.storage || ''} ${d.color || ''}${d.status === 'sold' ? ' (vendido)' : ''}` : 'Aparelho removido'; }
+    if (o.item_tipo === 'acessorio') { const a = accList.find(x => x.id === o.item_id); return a ? a.nome : 'Acessório removido'; }
+    return 'Página: ' + o.item_id;
+  };
+  const linhas = Object.values(porItem).sort((a, b) => b.visita - a.visita || b.whatsapp - a.whatsapp);
+  const tot = t => siteEvents.filter(e => e.tipo === t).length;
+  $('oVisits').textContent = tot('visita'); $('oClicks').textContent = tot('whatsapp'); $('oShares').textContent = tot('compartilhar');
+  $('oConv').textContent = tot('visita') ? (tot('whatsapp') / tot('visita') * 100).toFixed(1).replace('.', ',') + '%' : '—';
+  $('onlineRows').innerHTML = linhas.map(o => `<tr><td><b>${esc(nomeItem(o))}</b></td><td>${o.item_tipo === 'aparelho' ? 'iPhone' : o.item_tipo === 'acessorio' ? 'Acessório' : 'Página'}</td><td>${o.visita}</td><td>${o.whatsapp}</td><td>${o.compartilhar}</td><td>${o.visita ? (o.whatsapp / o.visita * 100).toFixed(0) + '%' : '—'}</td></tr>`).join('') || '<tr><td colspan="6" class="empty">Ainda não há visitas registradas nos últimos 30 dias.</td></tr>';
+
+  $('alertRows').innerHTML = alertsList.slice().sort((a, b) => a.atendido - b.atendido).map(a => {
+    const num = String(a.whatsapp).replace(/\D/g, ''); const br = num.length <= 11 ? '55' + num : num;
+    const msg = encodeURIComponent(`Olá, ${a.nome}! Aqui é da KGL Store. Chegou o ${a.procura} que você procurava. Quer ver as fotos?`);
+    return `<tr class="${a.atendido ? 'muted' : ''}"><td>${xDataBR(a.created_at)}</td><td><b>${esc(a.nome)}</b></td><td>${esc(a.procura)}${a.observacao ? `<br><span class="muted">${esc(a.observacao)}</span>` : ''}</td><td>${esc(a.whatsapp)}</td>
+      <td>${a.atendido ? '<span class="pill">Atendido</span>' : '<span class="pill amber">Aguardando</span>'}</td>
+      <td class="accList-acoes"><a class="secondary btnlink" target="_blank" rel="noopener" href="https://wa.me/${br}?text=${msg}">WhatsApp</a><button class="secondary" onclick="alertaAtendido('${a.id}',${!a.atendido})">${a.atendido ? 'Reabrir' : 'Marcar atendido'}</button><button class="secondary" onclick="alertaExcluir('${a.id}')">Excluir</button></td></tr>`;
+  }).join('') || '<tr><td colspan="6" class="empty">Ninguém pediu aviso ainda.</td></tr>';
+
+  $('testRows').innerHTML = testimonialsList.map(t => `<tr><td><b>${esc(t.nome)}</b><br><span class="muted">${esc([t.cidade, t.aparelho].filter(Boolean).join(' • '))}</span></td><td>${'★'.repeat(t.nota)}${'☆'.repeat(5 - t.nota)}</td><td class="quebra">${esc(t.texto)}</td><td>${t.publicado ? '<span class="pill">No site</span>' : '<span class="muted">Oculto</span>'}</td><td class="accList-acoes"><button class="secondary" onclick="depoimentoForm('${t.id}')">Editar</button></td></tr>`).join('') || '<tr><td colspan="5" class="empty">Nenhum depoimento. Clique em "＋ Depoimento".</td></tr>';
+}
+async function alertaAtendido(id, v) { const { error } = await sb.from('stock_alerts').update({ atendido: v }).eq('id', id).eq('store_id', storeId); if (error) return toast('Erro: ' + error.message); await loadExtras(); }
+async function alertaExcluir(id) { if (!confirm('Excluir este pedido de aviso?')) return; const { error } = await sb.from('stock_alerts').delete().eq('id', id).eq('store_id', storeId); if (error) return toast('Erro: ' + error.message); await loadExtras(); }
+
+function depoimentoForm(id) {
+  const t = testimonialsList.find(x => x.id === id) || { nota: 5, publicado: true };
+  const novo = !t.id;
+  const html = `<div class="formgrid">
+    ${xf('nome', 'Nome do cliente', 'text', `required value="${esc(t.nome || '')}" placeholder="Ex.: Mariana S."`)}
+    ${xf('cidade', 'Cidade', 'text', `value="${esc(t.cidade || '')}"`)}
+    ${xf('aparelho', 'O que comprou', 'text', `value="${esc(t.aparelho || '')}" placeholder="Ex.: iPhone 15 Pro"`)}
+    ${xs('nota', 'Nota', [5, 4, 3, 2, 1].map(n => `<option value="${n}" ${Number(t.nota) === n ? 'selected' : ''}>${'★'.repeat(n)}</option>`).join(''))}
+    <div class="field full"><label>Depoimento</label><textarea name="texto" rows="4" required>${esc(t.texto || '')}</textarea></div>
+    ${xs('publicado', 'Mostrar no site?', `<option value="true" ${t.publicado ? 'selected' : ''}>Sim</option><option value="false" ${t.publicado ? '' : 'selected'}>Não</option>`)}
+    ${xf('ordem', 'Ordem (menor aparece primeiro)', 'number', `step="1" value="${Number(t.ordem || 0)}"`)}
+    <div class="field full photo-upload-field"><label>Foto (opcional, ex.: cliente com o aparelho)</label><input name="foto" type="file" accept="image/*">${t.foto_path ? '<small>Já tem foto. Envie outra para trocar.</small>' : ''}</div>
+  </div>${novo ? '' : `<button type="button" class="danger" onclick="depoimentoExcluir('${t.id}')">Excluir depoimento</button>`}`;
+  xModal(novo ? 'Novo depoimento' : 'Editar depoimento', html, async (d, form) => {
+    const reg = { nome: d.nome.trim(), cidade: d.cidade.trim() || null, aparelho: d.aparelho.trim() || null, texto: d.texto.trim(), nota: Number(d.nota), publicado: d.publicado === 'true', ordem: Number(d.ordem || 0) };
+    const file = form.querySelector('[name=foto]').files[0];
+    if (file) {
+      if (!file.type.startsWith('image/') || file.size > 8 * 1024 * 1024) throw new Error('Envie uma imagem de até 8 MB.');
+      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg';
+      const path = `${storeId}/depoimentos/${Date.now()}.${ext}`;
+      const { error: up } = await sb.storage.from('kgl-device-photos').upload(path, file, { contentType: file.type, upsert: false });
+      if (up) throw new Error('Falha ao enviar foto: ' + up.message);
+      if (t.foto_path) await sb.storage.from('kgl-device-photos').remove([t.foto_path]);
+      reg.foto_path = path;
+    }
+    const r = novo ? await sb.from('testimonials').insert({ ...reg, store_id: storeId }) : await sb.from('testimonials').update(reg).eq('id', t.id).eq('store_id', storeId);
+    if (r.error) throw r.error;
+  });
+}
+async function depoimentoExcluir(id) {
+  const t = testimonialsList.find(x => x.id === id);
+  if (!confirm('Excluir o depoimento de ' + t.nome + '?')) return;
+  const { error } = await sb.from('testimonials').delete().eq('id', id).eq('store_id', storeId);
+  if (error) return toast('Erro: ' + error.message);
+  if (t.foto_path) await sb.storage.from('kgl-device-photos').remove([t.foto_path]);
+  xClose(); await loadExtras();
+}
+
+</script>
+</body>
+</html>

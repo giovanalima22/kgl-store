@@ -1,0 +1,11 @@
+LOGO KGL STORE
+
+kgl-icone.svg ................ icone quadrado (foto de perfil, aba do navegador)
+kgl-simbolo-fundo-escuro.svg . so o simbolo, para fundos escuros
+kgl-simbolo-fundo-claro.svg .. so o simbolo, para fundos claros
+kgl-logo-fundo-escuro.svg .... simbolo + nome, para fundos escuros
+kgl-logo-fundo-claro.svg ..... simbolo + nome, para fundos claros
+kgl-icone-1024.png ........... icone em PNG (Instagram, WhatsApp)
+
+SVG e um formato vetorial: pode ampliar a vontade sem perder qualidade.
+Cores: preto #111113, dourado #C9A45C, branco #FFFFFF.

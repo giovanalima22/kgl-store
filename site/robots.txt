@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /gestao/
+Disallow: /entrar.html
+
+Sitemap: https://kglstore.com.br/sitemap.xml

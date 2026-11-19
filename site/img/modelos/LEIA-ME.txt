@@ -1,0 +1,25 @@
+IMAGENS DOS MODELOS (cartões da página inicial e da lista)
+==========================================================
+
+Coloque aqui uma imagem para cada modelo, com estes nomes exatos:
+
+  iphone-16.png
+  iphone-15.png
+  iphone-14.png
+  iphone-13.png
+
+(os nomes vêm da lista MODELOS, em js/aparelhos.js; se criar um
+modelo novo, crie a imagem com o nome que você colocar lá)
+
+Enquanto o arquivo não existir, o site mostra uma ilustração no lugar.
+
+FORMATO RECOMENDADO
+  - PNG com fundo transparente (ou fundo branco/cinza bem claro)
+  - Aparelho em pé, inteiro, centralizado
+  - Cerca de 800 x 1000 px, abaixo de 300 KB
+
+SOBRE "FOTOS OFICIAIS"
+  As imagens de divulgação da Apple pertencem à Apple. Este pacote não
+  inclui nenhuma. Se for usar, o caminho seguro é obter por um canal
+  que autorize o uso (por exemplo, material fornecido a revendedores)
+  ou usar fotos próprias dos modelos em fundo neutro.
