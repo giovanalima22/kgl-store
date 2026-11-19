@@ -100,6 +100,7 @@ flowchart LR
 | SEO e medição | Schema.org JSON-LD, sitemap.xml, Open Graph, Google Analytics 4, Meta Pixel |
 | Testes | **Playwright + pytest** (Supabase simulado, sem internet) |
 | Ferramentas | Python (gerador das páginas, Pillow para tratamento de imagens) |
+| Servidor | PHP (prévia de link com Open Graph por anúncio e foto otimizada com GD) |
 | Hospedagem | HostGator (cPanel) + SSL automático |
 
 ---

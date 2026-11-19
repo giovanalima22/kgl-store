@@ -1,0 +1,19 @@
+# =====================================================================
+# KGL STORE — prévia de link com foto real
+# Links como aparelho.html?id=... passam a ser montados pelo
+# aparelho.php (mesma página, com título/foto do aparelho no card).
+# Se já existir um .htaccess no public_html, COPIE estas linhas para
+# o final dele em vez de substituir o arquivo.
+# =====================================================================
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{QUERY_STRING} (^|&)id=
+  RewriteRule ^aparelho\.html$ aparelho.php [L,QSA]
+  RewriteCond %{QUERY_STRING} (^|&)id=
+  RewriteRule ^acessorio\.html$ acessorio.php [L,QSA]
+</IfModule>
+
+# Arquivos internos que não devem ser abertos direto
+<Files "compartilhar.php">
+  Require all denied
+</Files>
