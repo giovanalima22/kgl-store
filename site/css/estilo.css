@@ -624,3 +624,34 @@ a { color: inherit; text-decoration: none; }
 .cartao-foto { contain: size; } /* altura sempre pela proporção, igual em todos os cartões */
 .cartao-foto.cartao-foto-real { position: relative; }
 .cartao-foto.cartao-foto-real img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- Galeria deslizante do anúncio ---------- */
+.galeria-principal { position: relative; }
+.trilho {
+  display: flex; width: 100%; height: 100%;
+  overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory;
+  scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain;
+  cursor: grab; outline: none;
+}
+.trilho::-webkit-scrollbar { display: none; }
+.trilho.arrastando { cursor: grabbing; scroll-snap-type: none; }
+.trilho img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; scroll-snap-align: center; scroll-snap-stop: always; user-select: none; -webkit-user-drag: none; }
+.trilho:focus-visible { box-shadow: inset 0 0 0 3px var(--dourado); }
+.gal-seta {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 2;
+  width: 44px; height: 44px; border-radius: 50%; border: 0; cursor: pointer;
+  background: rgba(255, 255, 255, 0.92); color: var(--tinta);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14); opacity: 0; transition: opacity 0.2s ease;
+}
+.gal-ant { left: 14px; } .gal-prox { right: 14px; }
+.galeria-principal:hover .gal-seta:not(:disabled), .gal-seta:focus-visible { opacity: 1; }
+.gal-seta:disabled { opacity: 0 !important; pointer-events: none; }
+.gal-contador {
+  position: absolute; top: 14px; right: 14px; z-index: 2; font-size: 12px; font-weight: 600;
+  background: rgba(17, 17, 19, 0.62); color: #fff; padding: 5px 10px; border-radius: 999px; pointer-events: none;
+}
+.gal-pontos { position: absolute; left: 0; right: 0; bottom: 14px; display: flex; justify-content: center; gap: 6px; pointer-events: none; }
+.gal-pontos i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); box-shadow: 0 0 0 1px rgba(0,0,0,0.12); transition: width 0.25s ease, background 0.25s ease; }
+.gal-pontos i.ativo { width: 20px; border-radius: 4px; background: #fff; }
+@media (hover: none) { .gal-seta { display: none; } }

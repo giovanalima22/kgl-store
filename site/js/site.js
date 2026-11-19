@@ -589,26 +589,96 @@
     revelar();
   }
 
-  /* ---------- Galeria (usada nos dois tipos de anúncio) ---------- */
+  /* ---------- Galeria (usada nos dois tipos de anúncio) ----------
+     Deslize para o lado no celular (ou use as setas / miniaturas) para
+     trocar de foto. */
+  var SETA_ESQ = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
+  var SETA_DIR = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
   function galeria(fotos, alt, reserva, quadrada) {
-    var g = '<div class="galeria' + (quadrada ? " galeria-quadrada" : "") + '"><div class="galeria-principal" id="foto-principal">' +
-      (fotos.length ? '<img src="' + esc(fotos[0]) + '" alt="' + esc(alt) + '">' : reserva) + "</div>";
+    var g = '<div class="galeria' + (quadrada ? " galeria-quadrada" : "") + '">';
+    if (!fotos.length) { return g + '<div class="galeria-principal">' + reserva + "</div></div>"; }
+    g += '<div class="galeria-principal" id="foto-principal"><div class="trilho" tabindex="0" aria-label="Fotos do produto. Deslize para ver as outras.">' +
+      fotos.map(function (f, i) {
+        return '<img src="' + esc(f) + '" alt="' + esc(alt) + " – foto " + (i + 1) + '"' + (i ? ' loading="lazy"' : "") + ' draggable="false">';
+      }).join("") + "</div>";
+    if (fotos.length > 1) {
+      g += '<button type="button" class="gal-seta gal-ant" aria-label="Foto anterior">' + SETA_ESQ + "</button>" +
+        '<button type="button" class="gal-seta gal-prox" aria-label="Próxima foto">' + SETA_DIR + "</button>" +
+        '<span class="gal-contador" aria-live="polite">1/' + fotos.length + "</span>" +
+        '<div class="gal-pontos" aria-hidden="true">' + fotos.map(function (f, i) { return "<i" + (i ? "" : ' class="ativo"') + "></i>"; }).join("") + "</div>";
+    }
+    g += "</div>";
     if (fotos.length > 1) {
       g += '<div class="miniaturas">' + fotos.map(function (f, i) {
-        return '<button type="button" class="miniatura' + (i === 0 ? " ativa" : "") + '" data-foto="' + esc(f) +
+        return '<button type="button" class="miniatura' + (i === 0 ? " ativa" : "") + '" data-i="' + i +
           '" aria-label="Ver foto ' + (i + 1) + '"><img src="' + esc(f) + '" alt="" loading="lazy"></button>';
       }).join("") + "</div>";
     }
     return g + "</div>";
   }
   function ativarGaleria(raiz) {
-    raiz.querySelectorAll(".miniatura").forEach(function (b) {
-      b.addEventListener("click", function () {
-        raiz.querySelector("#foto-principal img").src = b.getAttribute("data-foto");
-        raiz.querySelectorAll(".miniatura").forEach(function (x) { x.classList.remove("ativa"); });
-        b.classList.add("ativa");
+    var trilho = raiz.querySelector(".trilho");
+    if (!trilho) { return; }
+    var total = trilho.children.length, atual = 0;
+    var minis = raiz.querySelectorAll(".miniatura"), pontos = raiz.querySelectorAll(".gal-pontos i");
+    var contador = raiz.querySelector(".gal-contador"), ant = raiz.querySelector(".gal-ant"), prox = raiz.querySelector(".gal-prox");
+    var semMov = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function marcar(i) {
+      if (i === atual && contador && contador.textContent.indexOf(i + 1 + "/") === 0) { return; }
+      atual = i;
+      minis.forEach(function (m, k) { m.classList.toggle("ativa", k === i); });
+      pontos.forEach(function (p, k) { p.classList.toggle("ativo", k === i); });
+      if (contador) { contador.textContent = (i + 1) + "/" + total; }
+      if (ant) { ant.disabled = i === 0; }
+      if (prox) { prox.disabled = i === total - 1; }
+      var mini = minis[i];
+      if (mini && mini.parentNode.scrollWidth > mini.parentNode.clientWidth) {
+        mini.parentNode.scrollTo({ left: mini.offsetLeft - mini.parentNode.clientWidth / 2 + mini.clientWidth / 2, behavior: semMov ? "auto" : "smooth" });
+      }
+    }
+    function irPara(i) {
+      i = Math.max(0, Math.min(total - 1, i));
+      trilho.scrollTo({ left: i * trilho.clientWidth, behavior: semMov ? "auto" : "smooth" });
+      marcar(i);
+    }
+    var agendado = false;
+    trilho.addEventListener("scroll", function () {
+      if (agendado) { return; }
+      agendado = true;
+      window.requestAnimationFrame(function () {
+        agendado = false;
+        marcar(Math.round(trilho.scrollLeft / Math.max(1, trilho.clientWidth)));
       });
+    }, { passive: true });
+    minis.forEach(function (m) { m.addEventListener("click", function () { irPara(Number(m.getAttribute("data-i"))); }); });
+    if (ant) { ant.addEventListener("click", function () { irPara(atual - 1); }); }
+    if (prox) { prox.addEventListener("click", function () { irPara(atual + 1); }); }
+    trilho.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") { e.preventDefault(); irPara(atual - 1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); irPara(atual + 1); }
     });
+    /* arrastar com o mouse no computador */
+    var arrasto = null;
+    trilho.addEventListener("pointerdown", function (e) {
+      if (e.pointerType !== "mouse" || e.button !== 0) { return; }
+      arrasto = { x: e.clientX, inicio: trilho.scrollLeft, moveu: false };
+      trilho.classList.add("arrastando");
+    });
+    window.addEventListener("pointermove", function (e) {
+      if (!arrasto) { return; }
+      var dx = e.clientX - arrasto.x;
+      if (Math.abs(dx) > 4) { arrasto.moveu = true; }
+      trilho.scrollLeft = arrasto.inicio - dx;
+    });
+    window.addEventListener("pointerup", function (e) {
+      if (!arrasto) { return; }
+      var dx = e.clientX - arrasto.x, w = trilho.clientWidth, base = Math.round(arrasto.inicio / w);
+      trilho.classList.remove("arrastando");
+      arrasto = null;
+      irPara(Math.abs(dx) > w * 0.12 ? base + (dx < 0 ? 1 : -1) : base);
+    });
+    window.addEventListener("resize", function () { trilho.scrollLeft = atual * trilho.clientWidth; });
+    marcar(0);
   }
   function barraFixa(titulo, valor, link, tipo, id) {
     var fixa = document.getElementById("barra-fixa");
