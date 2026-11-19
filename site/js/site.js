@@ -323,6 +323,28 @@
   function seloDestaque(d) {
     return d ? '<span class="selo-destaque' + (norm(d) === "oferta" ? " oferta" : "") + '">' + esc(d) + "</span>" : "";
   }
+  /* Foto do cartão: a 1ª foto REAL do anúncio; sem foto (ou se falhar), a foto do modelo */
+  function fotoCartao(a) {
+    var m = modeloPorId(a.linha);
+    if (a.fotos && a.fotos[0]) {
+      return '<div class="cartao-foto cartao-foto-real"><img class="foto-real" src="' + esc(a.fotos[0]) + '" alt="' + esc(nomeCompleto(a)) +
+        '" loading="lazy" data-reserva="' + esc(m && m.foto ? m.foto : "") + '"></div>';
+    }
+    return '<div class="cartao-foto">' + fotoModelo(m, a.modelo) + "</div>";
+  }
+  function ativarFotosReais(raiz) {
+    raiz.querySelectorAll("img.foto-real").forEach(function (img) {
+      function voltar() {
+        var caixa = img.parentNode, reserva = img.getAttribute("data-reserva");
+        if (!caixa) { return; }
+        caixa.classList.remove("cartao-foto-real");
+        caixa.innerHTML = reserva ? '<img class="foto-modelo" src="' + esc(reserva) + '" alt="">' : ILUSTRA;
+        ativarFallback(caixa);
+      }
+      img.addEventListener("error", voltar);
+      if (img.complete && img.naturalWidth === 0) { voltar(); }
+    });
+  }
   function cartaoAparelho(a) {
     var sub = [a.armazenamento, a.cor].filter(Boolean).join(" · ");
     var valor = loja.mostrarPrecoNaVitrine
@@ -331,7 +353,7 @@
       : "";
     var bat = parseInt(a.bateria, 10);
     return '<a class="cartao surgir" href="aparelho.html?id=' + encodeURIComponent(a.id) + '">' + seloDestaque(a.destaque) +
-      '<div class="cartao-foto">' + fotoModelo(modeloPorId(a.linha), a.modelo) + "</div>" +
+      fotoCartao(a) +
       '<div class="cartao-base"><div><h3>' + esc(a.modelo) + "</h3><p>" + esc(sub) +
       (bat > 0 ? ' · <span class="cartao-bat">' + bat + "% bateria</span>" : "") + "</p>" + valor + "</div>" +
       '<span class="seta" aria-hidden="true">→</span></div></a>';
@@ -415,7 +437,7 @@
       if (dA.length + dX.length) {
         destaques.innerHTML = dA.map(cartaoAparelho).join("") + dX.map(cartaoAcessorio).join("");
         document.getElementById("secao-destaques").hidden = false;
-        ativarFallback(destaques);
+        ativarFallback(destaques); ativarFotosReais(destaques);
       }
     }
 
@@ -504,7 +526,7 @@
         if (f.ordem === "bateria") { v.sort(function (a, b) { return (parseInt(b.bateria, 10) || 0) - (parseInt(a.bateria, 10) || 0); }); }
         if (v.length) {
           vitrine.innerHTML = v.map(cartaoAparelho).join("");
-          ativarFallback(vitrine);
+          ativarFallback(vitrine); ativarFotosReais(vitrine);
         } else {
           var nome = modeloAtual ? modeloAtual.nome : "iPhone";
           var filtrando = base.length > 0;
