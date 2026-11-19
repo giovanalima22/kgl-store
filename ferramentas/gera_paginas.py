@@ -67,6 +67,7 @@ def pagina(arq, titulo, desc, corpo, atual=None, body_class="", extra="", robots
   <meta property="og:url" content="{SITE}{'' if arq=='index.html' else arq}">
   <meta property="og:image" content="{SITE}img/compartilhar.jpg">
   <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="KGL Store">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="robots" content="{robots}">
   <link rel="canonical" href="{SITE}{'' if arq=='index.html' else arq}">

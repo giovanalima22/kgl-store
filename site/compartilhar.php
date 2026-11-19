@@ -93,7 +93,8 @@ function kgl_pagina($arquivoHtml, $tipo) {
 
     [$titulo, $desc] = kgl_card($tipo, $item);
     $url = KGL_SITE . $arquivoHtml . '?id=' . rawurlencode($id);
-    $foto = !empty($item['fotos'][0]) ? KGL_SITE . 'foto.php?tipo=' . $tipo . '&id=' . rawurlencode($id) : KGL_SITE . 'img/compartilhar.jpg';
+    $versao = substr(sha1(json_encode($item)), 0, 8);   // muda quando preço/fotos mudam
+    $foto = !empty($item['fotos'][0]) ? KGL_SITE . 'foto.php?tipo=' . $tipo . '&id=' . rawurlencode($id) . '&v=' . $versao : KGL_SITE . 'img/compartilhar.jpg';
     $e = fn($s) => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 
     $trocas = [
@@ -103,8 +104,11 @@ function kgl_pagina($arquivoHtml, $tipo) {
         '/<meta property="og:description" content="[^"]*">/' => '<meta property="og:description" content="' . $e($desc) . '">',
         '/<meta property="og:url" content="[^"]*">/' => '<meta property="og:url" content="' . $e($url) . '">',
         '/<meta property="og:image" content="[^"]*">/' => '<meta property="og:image" content="' . $e($foto) . '">'
-            . "\n  " . '<meta property="og:image:width" content="800">'
-            . "\n  " . '<meta property="og:image:height" content="800">'
+            . "\n  " . '<meta property="og:image:width" content="1200">'
+            . "\n  " . '<meta property="og:image:height" content="630">'
+            . "\n  " . '<meta property="og:image:type" content="image/jpeg">'
+            . "\n  " . '<meta property="og:site_name" content="KGL Store">'
+            . "\n  " . '<meta name="twitter:image" content="' . $e($foto) . '">'
             . "\n  " . '<meta property="og:image:alt" content="' . $e($titulo) . '">',
         '/<meta property="og:type" content="[^"]*">/' => '<meta property="og:type" content="product">'
             . (!empty($item['preco']) ? "\n  " . '<meta property="product:price:amount" content="' . number_format((float)$item['preco'], 2, '.', '') . '">'
