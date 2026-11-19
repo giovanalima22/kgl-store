@@ -39,7 +39,7 @@ Sou engenheira de dados, e desenvolvimento web foi o curso técnico que fiz na E
 - Estoque de iPhones com fotos de **estado** (internas) × fotos de **anúncio** (públicas)
 - Compras, vendas, caixa, despesas, metas e relatórios exportáveis
 - **Acessórios**: estoque e **custo médio ponderado** calculados por triggers; estorno corrige estoque e caixa
-- **Loja online**: visitas e cliques no WhatsApp por anúncio, lista do "Avise-me" e depoimentos
+- **Loja online**: visitantes únicos por dia (IP anonimizado com hash + sal, o IP nunca é salvo), visitas e cliques no WhatsApp por anúncio, lista do "Avise-me" e depoimentos
 
 | | |
 |---|---|
@@ -122,7 +122,7 @@ testes/               testes de ponta a ponta com Playwright
 ## 🚀 Como rodar
 
 1. Crie um projeto no [Supabase](https://supabase.com).
-2. Rode no **SQL Editor**, nesta ordem, `supabase/01-vitrine.sql` e `supabase/02-acessorios-e-melhorias.sql`.
+2. Rode no **SQL Editor**, nesta ordem, `supabase/01-vitrine.sql`, `supabase/02-acessorios-e-melhorias.sql` e `supabase/03-visitantes.sql`.
    > Os scripts complementam o esquema base do sistema (lojas, aparelhos, compras, vendas, caixa), que não está incluído neste repositório.
 3. Preencha a URL e a chave **publishable** em `site/js/conexao.js` e em `gestao/index.html`.
 4. Sirva a pasta `site/` (ex.: `python -m http.server`) ou envie para a hospedagem.

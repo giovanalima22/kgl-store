@@ -33,6 +33,7 @@ button:focus-visible{outline:2px solid #d6b77e;outline-offset:3px}
 .site-box{margin-top:6px;padding-top:12px;border-top:1px solid #45464c}.site-box label{font-size:12px;color:#e7cf9a}.site-hint{color:#9a958c;font-size:11px}
 .tag-site,.tag-admin{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:3px 7px;border-radius:999px;margin-left:6px;vertical-align:middle}.tag-site{background:#c9a45c;color:#17181b}.tag-admin{background:#3a3b41;color:#cfc9bd}
 .ad-photo-field{border-color:#c9a45c!important;background:#2f2a20!important}
+.periodo-online{width:auto!important;min-width:170px}.graf-caixa{margin-top:10px;background:#1c1d21;border:1px solid #34353b;border-radius:12px;padding:14px 14px 4px}.graf-visitas{width:100%;height:auto;display:block}.graf-linha{stroke:#34353b;stroke-dasharray:3 4}.graf-eixo{fill:#8d8a84;font-size:11px}.graf-visita{fill:#4a4b52}.graf-pessoa{fill:#c9a45c}.graf-clique{fill:#25d366}.graf-legenda{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-top:14px;font-size:12px;color:#cfc9bd}.graf-legenda i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}.lg-pessoa{background:#c9a45c}.lg-visita{background:#4a4b52}.lg-clique{background:#25d366;border-radius:50%!important}
 .photo-kind{display:flex;flex-direction:column;align-items:stretch;gap:5px;width:104px}.photo-group{width:100%;display:grid;gap:6px;margin-bottom:12px}.photo-group b{font-size:12px;color:#e9e4da}.photo-group small{color:#9a958c;font-size:11px}.photo-row{display:flex;flex-wrap:wrap;gap:10px}.photo-thumb{position:relative;width:104px;height:130px;border-radius:10px;overflow:hidden;background:#2a2b30}.photo-thumb img{width:100%!important;height:100%!important;object-fit:cover;margin:0!important;border-radius:0!important}.photo-num{position:absolute;top:5px;left:5px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;font-weight:800;border-radius:999px;padding:1px 7px}.photo-capa{position:absolute;bottom:5px;left:5px;background:#c9a45c;color:#17181b;font-size:10px;font-weight:800;border-radius:999px;padding:2px 7px;text-transform:uppercase}.photo-ord{display:flex;gap:4px}.photo-ord button{flex:1;width:auto!important;margin:0!important;padding:5px 0!important;font-size:11px;background:#34353b!important;color:#eee9df!important}.photo-ord button:disabled{opacity:.35}.photo-kind .tag-site,.photo-kind .tag-admin{margin-left:0}.photo-move{width:auto!important;padding:5px 8px!important;font-size:11px;margin:0!important;background:#34353b!important;color:#eee9df!important;text-align:center!important}
 .navcards{grid-template-columns:repeat(4,minmax(0,1fr))}.nav-badge{font-style:normal;background:#c9a45c;color:#17181b;border-radius:999px;padding:1px 7px;font-size:11px;margin-left:4px}.nav-badge[hidden]{display:none}
 .acc-acoes{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.acc-acoes button,.btnlink{padding:7px 10px;font-size:12px;width:auto;margin:0}.btnlink{display:inline-block;border-radius:10px;text-decoration:none;font-weight:750}.quebra{white-space:normal;min-width:240px;max-width:420px}
@@ -227,11 +228,14 @@ button:focus-visible{outline:2px solid #d6b77e;outline-offset:3px}
     <div class="tablewrap"><table><thead><tr><th>Data</th><th>Tipo</th><th>Produto</th><th>Qtd.</th><th>Valor</th><th>Detalhes</th><th></th></tr></thead><tbody id="accMoveRows"></tbody></table></div></div>
   </section>
   <section id="online" class="page">
-   <div class="cards"><div class="metric"><label>Visitas (30 dias)</label><strong id="oVisits">0</strong><small>Aberturas de anúncios e páginas</small></div><div class="metric"><label>Cliques no WhatsApp</label><strong id="oClicks">0</strong><small>Pessoas que chamaram pelo site</small></div><div class="metric"><label>Conversão</label><strong id="oConv">—</strong><small>Cliques ÷ visitas</small></div><div class="metric"><label>Compartilhamentos</label><strong id="oShares">0</strong><small>Anúncios enviados para alguém</small></div></div>
+   <div class="panel"><div class="panelhead"><div><h2>Visitantes do site</h2><div class="notice">Mesmo IP conta como a mesma pessoa, não importa quantas vezes ela volte. Suas visitas, logada, não contam. <span id="oPeriodoTxt"></span></div></div><select id="oPeriodo" class="periodo-online" onchange="loadExtras()"><option value="7">Últimos 7 dias</option><option value="30" selected>Últimos 30 dias</option><option value="90">Últimos 90 dias</option></select></div>
+    <div class="cards"><div class="metric"><label>Visitantes únicos</label><strong id="oVisitors">0</strong><small>Pessoas diferentes (por IP)</small></div><div class="metric"><label>Visitas</label><strong id="oVisits">0</strong><small>Todas as aberturas de página</small></div><div class="metric"><label>Chamaram no WhatsApp</label><strong id="oClicks">0</strong><small id="oClicksSub">Pessoas diferentes</small></div><div class="metric"><label>Conversão</label><strong id="oConv">—</strong><small>Quem chamou ÷ visitantes</small></div></div>
+    <div class="graf-legenda"><span><i class="lg-pessoa"></i>Visitantes únicos</span><span><i class="lg-visita"></i>Visitas</span><span><i class="lg-clique"></i>Dia com clique no WhatsApp</span><span class="muted">Compartilhamentos no período: <b id="oShares">0</b></span></div>
+    <div id="oChart" class="graf-caixa"></div></div>
    <div class="panel"><div class="panelhead"><div><h2>Avise-me quando chegar</h2><div class="notice">Clientes que pediram aviso pelo site. Chame pelo WhatsApp quando comprar o modelo.</div></div></div>
     <div class="tablewrap"><table><thead><tr><th>Data</th><th>Cliente</th><th>Procura</th><th>WhatsApp</th><th>Status</th><th></th></tr></thead><tbody id="alertRows"></tbody></table></div></div>
-   <div class="panel"><div class="panelhead"><div><h2>Visitas e cliques por anúncio</h2><div class="notice">Últimos 30 dias. Muita visita e pouco clique costuma indicar preço ou fotos para rever.</div></div></div>
-    <div class="tablewrap"><table><thead><tr><th>Anúncio</th><th>Tipo</th><th>Visitas</th><th>Cliques WhatsApp</th><th>Compart.</th><th>Conversão</th></tr></thead><tbody id="onlineRows"></tbody></table></div></div>
+   <div class="panel"><div class="panelhead"><div><h2>Visitas e cliques por anúncio</h2><div class="notice">No período escolhido. Muitos visitantes e poucos cliques costuma indicar preço ou fotos para rever.</div></div></div>
+    <div class="tablewrap"><table><thead><tr><th>Anúncio</th><th>Tipo</th><th>Visitantes</th><th>Visitas</th><th>Chamaram no WhatsApp</th><th>Compart.</th><th>Conversão</th></tr></thead><tbody id="onlineRows"></tbody></table></div></div>
    <div class="panel"><div class="panelhead"><div><h2>Depoimentos de clientes</h2><div class="notice">Aparecem na página inicial do site.</div></div><button onclick="depoimentoForm()">＋ Depoimento</button></div>
     <div class="tablewrap"><table><thead><tr><th>Cliente</th><th>Nota</th><th>Texto</th><th>Site</th><th></th></tr></thead><tbody id="testRows"></tbody></table></div></div>
   </section>
@@ -483,7 +487,8 @@ const xUniq = arr => [...new Set(arr.filter(Boolean))].sort((a, b) => a.localeCo
 /* ---------- carregar dados ---------- */
 async function loadExtras() {
   if (!storeId) return;
-  const desde = new Date(Date.now() - 30 * 864e5).toISOString();
+  const dias = Number(document.getElementById('oPeriodo')?.value || 30);
+  const desde = new Date(Date.now() - dias * 864e5).toISOString();
   const q = [
     sb.from('accessories').select('*').eq('store_id', storeId).order('nome'),
     sb.from('accessory_photos').select('accessory_id,storage_path,sort_order').eq('store_id', storeId).order('sort_order'),
@@ -491,7 +496,7 @@ async function loadExtras() {
     sb.from('accessory_sales').select('*').eq('store_id', storeId).order('data', { ascending: false }).limit(300),
     sb.from('stock_alerts').select('*').eq('store_id', storeId).order('created_at', { ascending: false }).limit(300),
     sb.from('testimonials').select('*').eq('store_id', storeId).order('ordem').order('created_at', { ascending: false }),
-    sb.from('site_events').select('tipo,item_tipo,item_id,created_at').eq('store_id', storeId).gte('created_at', desde).limit(20000)
+    sb.from('site_events').select('tipo,item_tipo,item_id,created_at,visitante').eq('store_id', storeId).gte('created_at', desde).limit(20000)
   ];
   const r = await Promise.all(q);
   const falhou = r.find(x => x.error);
@@ -761,22 +766,59 @@ async function accEstornar(tipo, id) {
    ===================================================================== */
 function renderOnline() {
   if (!$('onlineRows')) return;
+  const dias = Number($('oPeriodo')?.value || 30);
+  /* quem é quem: mesmo IP = mesma pessoa (eventos antigos, sem IP, contam um a um) */
+  const ev = siteEvents.map((e, k) => ({ ...e, quem: e.visitante || 'sem-ip-' + k }));
+  const unicos = arr => new Set(arr.map(e => e.quem)).size;
+  const visitas = ev.filter(e => e.tipo === 'visita'), cliques = ev.filter(e => e.tipo === 'whatsapp');
+  const nVis = unicos(visitas), nCli = unicos(cliques);
+  $('oVisitors').textContent = nVis;
+  $('oVisits').textContent = visitas.length;
+  $('oClicks').textContent = nCli;
+  $('oClicksSub').textContent = cliques.length + (cliques.length === 1 ? ' clique no total' : ' cliques no total');
+  $('oConv').textContent = nVis ? (nCli / nVis * 100).toFixed(1).replace('.', ',') + '%' : '—';
+  $('oShares').textContent = ev.filter(e => e.tipo === 'compartilhar').length;
+  $('oPeriodoTxt').textContent = 'Últimos ' + dias + ' dias';
+
+  /* gráfico por dia */
+  const fmt = d => { const x = new Date(d); return new Date(x.getTime() - x.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
+  const diasLista = []; for (let k = dias - 1; k >= 0; k--) diasLista.push(fmt(Date.now() - k * 864e5));
+  const porDia = {}; diasLista.forEach(d => porDia[d] = { pessoas: new Set(), visitas: 0, cliques: new Set() });
+  ev.forEach(e => { const d = fmt(e.created_at); if (!porDia[d]) return; if (e.tipo === 'visita') { porDia[d].pessoas.add(e.quem); porDia[d].visitas++; } if (e.tipo === 'whatsapp') porDia[d].cliques.add(e.quem); });
+  const serie = diasLista.map(d => ({ d, p: porDia[d].pessoas.size, v: porDia[d].visitas, c: porDia[d].cliques.size }));
+  const max = Math.max(1, ...serie.map(x => x.v));
+  const W = 900, H = 220, base = 190, larg = W / serie.length, barra = Math.max(3, larg * 0.62);
+  const escala = v => (v / max) * (base - 14);
+  let svg = `<svg viewBox="0 0 ${W} ${H}" class="graf-visitas" role="img" aria-label="Visitantes por dia">`;
+  [0.5, 1].forEach(f => { const y = base - (base - 14) * f; svg += `<line x1="0" x2="${W}" y1="${y}" y2="${y}" class="graf-linha"/><text x="${W}" y="${y - 4}" text-anchor="end" class="graf-eixo">${Math.round(max * f)}</text>`; });
+  serie.forEach((x, k) => {
+    const cx = k * larg + (larg - barra) / 2, dt = x.d.slice(8, 10) + '/' + x.d.slice(5, 7);
+    svg += `<g><title>${dt}: ${x.p} visitante(s) · ${x.v} visita(s) · ${x.c} clique(s) no WhatsApp</title>`;
+    svg += `<rect x="${cx}" y="${base - escala(x.v)}" width="${barra}" height="${escala(x.v)}" rx="3" class="graf-visita"/>`;
+    svg += `<rect x="${cx}" y="${base - escala(x.p)}" width="${barra}" height="${escala(x.p)}" rx="3" class="graf-pessoa"/>`;
+    if (x.c) svg += `<circle cx="${cx + barra / 2}" cy="${base - escala(x.p) - 9}" r="4" class="graf-clique"/>`;
+    if (serie.length <= 31 ? k % Math.ceil(serie.length / 10) === 0 : k % 14 === 0) svg += `<text x="${cx + barra / 2}" y="${H - 6}" text-anchor="middle" class="graf-eixo">${dt}</text>`;
+    svg += `</g>`;
+  });
+  $('oChart').innerHTML = svg + '</svg>';
+
+  /* por anúncio */
   const porItem = {};
-  siteEvents.forEach(e => {
+  ev.forEach(e => {
     const k = e.item_tipo + ':' + e.item_id;
-    const o = porItem[k] = porItem[k] || { item_tipo: e.item_tipo, item_id: e.item_id, visita: 0, whatsapp: 0, compartilhar: 0 };
-    o[e.tipo]++;
+    const o = porItem[k] = porItem[k] || { item_tipo: e.item_tipo, item_id: e.item_id, pessoas: new Set(), visita: 0, cliques: new Set(), compartilhar: 0 };
+    if (e.tipo === 'visita') { o.visita++; o.pessoas.add(e.quem); }
+    if (e.tipo === 'whatsapp') o.cliques.add(e.quem);
+    if (e.tipo === 'compartilhar') o.compartilhar++;
   });
   const nomeItem = o => {
     if (o.item_tipo === 'aparelho') { const d = devices.find(x => x.id === o.item_id); return d ? `${d.model} ${d.storage || ''} ${d.color || ''}${d.status === 'sold' ? ' (vendido)' : ''}` : 'Aparelho removido'; }
     if (o.item_tipo === 'acessorio') { const a = accList.find(x => x.id === o.item_id); return a ? a.nome : 'Acessório removido'; }
-    return 'Página: ' + o.item_id;
+    const nomes = { inicio: 'Página inicial', iphones: 'Lista de iPhones', acessorios: 'Lista de acessórios' };
+    return nomes[o.item_id] || 'Página: ' + o.item_id;
   };
-  const linhas = Object.values(porItem).sort((a, b) => b.visita - a.visita || b.whatsapp - a.whatsapp);
-  const tot = t => siteEvents.filter(e => e.tipo === t).length;
-  $('oVisits').textContent = tot('visita'); $('oClicks').textContent = tot('whatsapp'); $('oShares').textContent = tot('compartilhar');
-  $('oConv').textContent = tot('visita') ? (tot('whatsapp') / tot('visita') * 100).toFixed(1).replace('.', ',') + '%' : '—';
-  $('onlineRows').innerHTML = linhas.map(o => `<tr><td><b>${esc(nomeItem(o))}</b></td><td>${o.item_tipo === 'aparelho' ? 'iPhone' : o.item_tipo === 'acessorio' ? 'Acessório' : 'Página'}</td><td>${o.visita}</td><td>${o.whatsapp}</td><td>${o.compartilhar}</td><td>${o.visita ? (o.whatsapp / o.visita * 100).toFixed(0) + '%' : '—'}</td></tr>`).join('') || '<tr><td colspan="6" class="empty">Ainda não há visitas registradas nos últimos 30 dias.</td></tr>';
+  const linhas = Object.values(porItem).sort((a, b) => b.pessoas.size - a.pessoas.size || b.visita - a.visita);
+  $('onlineRows').innerHTML = linhas.map(o => `<tr><td><b>${esc(nomeItem(o))}</b></td><td>${o.item_tipo === 'aparelho' ? 'iPhone' : o.item_tipo === 'acessorio' ? 'Acessório' : 'Página'}</td><td><b>${o.pessoas.size}</b></td><td>${o.visita}</td><td>${o.cliques.size}</td><td>${o.compartilhar}</td><td>${o.pessoas.size ? Math.round(o.cliques.size / o.pessoas.size * 100) + '%' : '—'}</td></tr>`).join('') || `<tr><td colspan="7" class="empty">Ainda não há visitas registradas nos últimos ${dias} dias.</td></tr>`;
 
   $('alertRows').innerHTML = alertsList.slice().sort((a, b) => a.atendido - b.atendido).map(a => {
     const num = String(a.whatsapp).replace(/\D/g, ''); const br = num.length <= 11 ? '55' + num : num;
